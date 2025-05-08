@@ -64,7 +64,7 @@ const Home = () => {
           </div>
 
           {/* Right Image */}
-          <div className="w-full md:w-1/2 flex justify-center">
+          <div className="w-full md:w-1/2 flex justify-center z-10">
             <img
               src={docimage}
               alt="Healthcare Illustration"

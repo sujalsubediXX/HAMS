@@ -40,13 +40,13 @@ const Register = () => {
   }
   return (
     <div className="min-h-screen bg-blue-100 flex flex-col justify-center py-3 sm:px-6 ">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md mt-2">
+      <div className="sm:mx-auto w-full sm:max-w-md mt-2">
         <h2 className="text-center text-3xl font-extrabold text-gray-900">
           Create Your Healthcare Account
         </h2>
       </div>
 
-      <div className="mt-5 sm:mx-auto w-4/5 mx-auto sm:w-full sm:max-w-md">
+      <div className="mt-5 sm:mx-auto mx-auto w-[94vw] sm:w-full sm:max-w-md">
         <div className=" bg-white py-8 px-4  sm:rounded-lg sm:px-10  shadow-black shadow-2xl">
           <form className="space-y-4" onSubmit={(e)=>{
             e.preventDefault();

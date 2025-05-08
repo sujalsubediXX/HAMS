@@ -55,7 +55,7 @@ const Login = () => {
   return (
     <>
       <div className="min-h-screen w-full flex justify-center items-center bg-gray-50">
-        <div className="w-[74vw] md:w-[86vw] lg:w-3/5 h-auto md:h-4/5 rounded-lg shadow-2xl flex md:flex-row overflow-hidden bg-white text-black">
+        <div className="w-[92vw] md:w-[86vw] lg:w-3/5 h-auto md:h-4/5 rounded-lg shadow-2xl flex md:flex-row overflow-hidden bg-white text-black">
           <div className="hidden md:block md:w-1/2">
             <img
               src={loginside}
