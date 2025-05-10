@@ -74,7 +74,10 @@ const Header = () => {
       >
         {/* Logo */}
         <div className="cursor-pointer">
+          <Link to="/">
           <img src={logo1} alt="Logo" className="h-[10vh]" />
+          </Link>
+  
         </div>
 
         {/* Desktop Navigation */}

@@ -79,6 +79,7 @@ const router = createBrowserRouter([
         path: "/bookappointment",
         element: <BookAppointment />,
       },
+     
     ],
   },
 ]);
