@@ -1,57 +1,98 @@
 import React, { useEffect, useState } from "react";
-import { Link ,useNavigate} from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../Utils/AuthProvider.jsx";
 import toast from "react-hot-toast";
 import axios from "axios";
+
 const Register = () => {
   const [loading, setLoading] = useState(false);
-  const [name,setName]=useState("");
-  const [email,setEmail]=useState("");
-  const [password,setPassword]=useState("");
-  const navigate=useNavigate(); 
-  const {user}=useAuth();
- 
+  const [error, setError] = useState({});
+  const [location, setLocation] = useState(null); // State to hold location
+  const navigate = useNavigate();
+  const { user } = useAuth();
 
-  useEffect(()=>{
-    if(user){
-      setTimeout(()=>{
+  useEffect(() => {
+    if (user) {
+      setTimeout(() => {
         navigate("/");
-      },3000)
+      }, 3000);
     }
-   
-  },[user])
+  }, [user, navigate]);
 
-  const handleSubmit=async()=>{
-    setLoading(true);
-    try {
-      const userdata={name,email,password}
-      const res=await axios.post("http://localhost:3000/user/register",userdata);
-      if(res.status==201){
-        toast.success(res.data.message);
-        setTimeout(()=>{
-          navigate("/login");
-        },2000)
-       
-      }
-    } catch (error) {
-      console.log("Error occured in register page"+error);
-      setLoading(false)
+  // Get user location when component mounts
+  useEffect(() => {
+    if ("geolocation" in navigator) {
+    
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const { latitude, longitude } = pos.coords;
+          if(!latitude || ! longitude){
+           
+            setLocation({ lat: 27.6681, lng: 85.3206 });
+          }else{
+            setLocation({ lat: latitude, lng: longitude });
+
+          }
+        },
+        (err) => {
+          console.error("Error getting location:", err.message);
+        }
+      );
     }
-  }
+  }, []);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm();
+
+  const password = watch("password");
+
+  const onSubmit = async (data) => {
+    setError({});
+
+    // Append location data if available
+    if (location) {
+      data.location = location;
+    }
+
+    try {
+      setLoading(true);
+      const response = await axios.post("http://localhost:3000/api/user/register", data);
+
+      if (response.status === 201) {
+        toast.success("Registration successful!");
+        setTimeout(() => {
+          navigate("/login");
+        }, 1500);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (err) {
+      if (err.response && err.response.data && err.response.data.message) {
+        toast.error(err.response.data.message);
+      } else {
+        toast.error("Registration failed!");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-blue-100 flex flex-col justify-center py-3 sm:px-6 ">
+    <div className="min-h-screen bg-gray-100 flex flex-col justify-center py-3 sm:px-6">
       <div className="sm:mx-auto w-full sm:max-w-md mt-2">
-        <h2 className="text-center text-3xl font-extrabold text-gray-900">
+        <h2 className="text-center text-[28px] w-full font-bold text-gray-900">
           Create Your Healthcare Account
         </h2>
       </div>
 
       <div className="mt-5 sm:mx-auto mx-auto w-[94vw] sm:w-full sm:max-w-md">
-        <div className=" bg-white py-8 px-4  sm:rounded-lg sm:px-10  shadow-black shadow-2xl">
-          <form className="space-y-4" onSubmit={(e)=>{
-            e.preventDefault();
-            handleSubmit();
-          }}>
+        <div className="bg-white py-8 px-4 sm:rounded-lg sm:px-10 shadow-blue-500 shadow-2xl">
+          <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
             <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
               <div>
                 <label
@@ -60,15 +101,19 @@ const Register = () => {
                 >
                   First Name
                 </label>
-                <div className="mt-1">
-                  <input
-                    type="text"
-                    id="firstName"
-                    name="firstName"
-                    className="block w-full shadow-sm sm:text-sm rounded-md border p-2"
-                    onChange={(e)=>setName(e.target.value)}
-                  />
-                </div>
+                <input
+                  type="text"
+                  id="firstName"
+                  {...register("firstName", {
+                    required: "First name is required",
+                  })}
+                  className="block w-full shadow-sm sm:text-sm rounded-md border p-2"
+                />
+                {errors.firstName && (
+                  <span className="text-sm text-red-400">
+                    {errors.firstName.message}
+                  </span>
+                )}
               </div>
 
               <div>
@@ -78,14 +123,19 @@ const Register = () => {
                 >
                   Last Name
                 </label>
-                <div className="mt-1">
-                  <input
-                    type="text"
-                    id="lastName"
-                    name="lastName"
-                    className="block w-full shadow-sm sm:text-sm rounded-md border p-2"
-                  />
-                </div>
+                <input
+                  type="text"
+                  id="lastName"
+                  {...register("lastName", {
+                    required: "Last name is required",
+                  })}
+                  className="block w-full shadow-sm sm:text-sm rounded-md border p-2"
+                />
+                {errors.lastName && (
+                  <span className="text-sm text-red-400">
+                    {errors.lastName.message}
+                  </span>
+                )}
               </div>
             </div>
 
@@ -96,15 +146,23 @@ const Register = () => {
               >
                 Email
               </label>
-              <div className="mt-1">
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  className="block w-full shadow-sm sm:text-sm rounded-md border p-2"
-                  onChange={(e)=>setEmail(e.target.value)}
-                />
-              </div>
+              <input
+                type="email"
+                id="email"
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: "Invalid email address",
+                  },
+                })}
+                className="block w-full shadow-sm sm:text-sm rounded-md border p-2"
+              />
+              {errors.email && (
+                <span className="text-sm text-red-400">
+                  {errors.email.message}
+                </span>
+              )}
             </div>
 
             <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
@@ -115,15 +173,23 @@ const Register = () => {
                 >
                   Password
                 </label>
-                <div className="mt-1">
-                  <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    className="block w-full shadow-sm sm:text-sm rounded-md border p-2"
-                    onChange={(e)=>setPassword(e.target.value)}
-                  />
-                </div>
+                <input
+                  type="password"
+                  id="password"
+                  {...register("password", {
+                    required: "Password is required",
+                    minLength: {
+                      value: 6,
+                      message: "Password must be at least 6 characters",
+                    },
+                  })}
+                  className="block w-full shadow-sm sm:text-sm rounded-md border p-2"
+                />
+                {errors.password && (
+                  <span className="text-sm text-red-400">
+                    {errors.password.message}
+                  </span>
+                )}
               </div>
 
               <div>
@@ -133,50 +199,79 @@ const Register = () => {
                 >
                   Confirm Password
                 </label>
-                <div className="mt-1">
-                  <input
-                    type="password"
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    className="block w-full shadow-sm sm:text-sm rounded-md border p-2"
-                  />
-                </div>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  {...register("confirmPassword", {
+                    required: "Confirm password is required",
+                    validate: (value) =>
+                      value === password || "Passwords do not match",
+                  })}
+                  className="block w-full shadow-sm sm:text-sm rounded-md border p-2"
+                />
+                {errors.confirmPassword && (
+                  <span className="text-sm text-red-400">
+                    {errors.confirmPassword.message}
+                  </span>
+                )}
               </div>
             </div>
 
             <div>
               <label
-                htmlFor="phone"
+                htmlFor="phonenumber"
                 className="block text-sm font-medium text-gray-700"
               >
                 Phone Number
               </label>
-              <div className="mt-1">
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  className="block w-full shadow-sm sm:text-sm rounded-md border p-2"
-                />
-              </div>
+              <input
+                type="text"
+                id="phonenumber"
+                {...register("phonenumber", {
+                  required: "Phone number is required",
+                  pattern: {
+                    value: /^(97|98)\d{8}$/,
+                    message: "Phone number must start with 97 or 98",
+                  },
+                  minLength: {
+                    value: 10,
+                    message: "Phone number must be exactly 10 digits",
+                  },
+                  maxLength: {
+                    value: 10,
+                    message: "Phone number must be exactly 10 digits",
+                  },
+                })}
+                className="block w-full shadow-sm sm:text-sm rounded-md border p-2"
+              />
+              {errors.phonenumber && (
+                <span className="text-sm text-red-400">
+                  {errors.phonenumber.message}
+                </span>
+              )}
             </div>
 
             <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
               <div>
                 <label
-                  htmlFor="dateOfBirth"
+                  htmlFor="age"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Date of Birth
+                  Age
                 </label>
-                <div className="mt-1">
-                  <input
-                    type="date"
-                    id="dateOfBirth"
-                    name="dateOfBirth"
-                    className="block w-full shadow-sm sm:text-sm rounded-md border p-2"
-                  />
-                </div>
+                <input
+                  type="number"
+                  id="age"
+                  {...register("age", {
+                    required: "Age is required",
+                  })}
+                  className="block w-full shadow-sm sm:text-sm rounded-md border p-2"
+                />
+                {errors.age && (
+                  <span className="text-sm text-red-400">
+                    {errors.age.message}
+                  </span>
+                )}
               </div>
 
               <div>
@@ -186,18 +281,21 @@ const Register = () => {
                 >
                   Gender
                 </label>
-                <div className="mt-1">
-                  <select
-                    id="gender"
-                    name="gender"
-                    className="block w-full shadow-sm sm:text-sm rounded-md border p-2 "
-                  >
-                    <option value="">Select Gender</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
+                <select
+                  id="gender"
+                  {...register("gender", { required: "Gender is required" })}
+                  className="block w-full shadow-sm sm:text-sm rounded-md border p-2"
+                >
+                  <option value="">Select Gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                </select>
+                {errors.gender && (
+                  <span className="text-sm text-red-400">
+                    {errors.gender.message}
+                  </span>
+                )}
               </div>
             </div>
 
@@ -205,14 +303,13 @@ const Register = () => {
               <button
                 type="submit"
                 className="w-full flex justify-center py-2 px-4 border border-transparent bg-blue-600 rounded-md shadow-sm text-sm font-medium text-white cursor-pointer"
+                disabled={loading}
               >
-                 {loading ? (
-                    <span className="loading loading-spinner text-success"></span>
-                    // <span className="loading loading-dots loading-xl"></span>
-                  ) : (
-                    "Register"
-                  )}
-           
+                {loading ? (
+                  <span className="loading loading-spinner text-success" />
+                ) : (
+                  "Register"
+                )}
               </button>
             </div>
           </form>
@@ -220,7 +317,7 @@ const Register = () => {
           <div className="mt-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300"></div>
+                <div className="w-full border-t border-gray-300" />
               </div>
               <div className="relative flex justify-center text-sm">
                 <span className="px-2 bg-white text-gray-500">
@@ -232,7 +329,7 @@ const Register = () => {
             <div className="mt-6">
               <Link
                 to="/login"
-                className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
               >
                 Sign in
               </Link>

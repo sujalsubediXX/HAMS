@@ -1,12 +1,12 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
-import Sidepanel from './pages/admin/Sidepanel.jsx'
+import AdminSidebar from './Components/AdminSidebar'
 const Adminlayout = () => {
   return (
     <>
-    <div className="flex">
-    <Sidepanel/>
-    <Outlet />
+    <div className="flex h-[100vh] overflow-y-hidden">
+    <AdminSidebar/>
+    <Outlet/>
     </div>
    
     </>

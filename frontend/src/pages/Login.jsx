@@ -6,59 +6,104 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { useAuth } from "../Utils/AuthProvider";
 const datas = {
-  role: ["User", "Doctor"],
+  role: ["User", "Doctor","Admin"],
 };
 
 const Login = () => {
-  const navigate = useNavigate(); // ✅ Hook placed inside the component
+  const navigate = useNavigate(); 
   const { user, login } = useAuth();
   const [showPassword, setShowpassword] = useState(false);
+  const [role,setRole]=useState("User");
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
   const [loading, setLoading] = useState(false);
   useEffect(() => {
-    if (user) {
-      setTimeout(() => {
+    setTimeout(()=>{
+      if (user && user.role === "Doctor") {
+        navigate("/doctor/profile");
+      } else if (user && user.role === "User") {
         navigate("/");
-      }, 3000);
+      } else if (user && user.role === "Admin") {
+        navigate("/admin/admindashboard");
+      }
+    },3000)
+    if (user && user.role === "Doctor") {
+      navigate("/doctor/profile");
+    } else if (user && user.role === "User") {
+      navigate("/");
+    } else if (user && user.role === "Admin") {
+      navigate("/admin/admindashboard");
     }
-  }, [user, navigate]);
+  }, [user]);
+  
 
   const setLogin = async () => {
     try {
       setLoading(true);
-      const userdata = { email, password };
-      const res = await axios.post("http://localhost:3000/user/login", {
-        email,
-        password,
-      });
-      if (res.status == 200) {
-        login(userdata);
-        setTimeout(() => {
-          toast.success("Login Success");
-        }, 1500);
-        setTimeout(() => {
-          navigate("/");
-        }, 3000);
+      let res = "";
+      let location = "";
+  
+      if (role === "User") {
+        res = await axios.post("http://localhost:3000/api/user/login", {
+          email,
+          password,
+      
+        });
+        location = "/";
+      } else if (role === "Doctor") {
+        res = await axios.post("http://localhost:3000/api/doctor/login", {
+          email,
+          password,
+
+        });
+        location = "/doctor/profile";
       } else {
-        setLoading(false);
-        toast.error("Invalid Credentials");
+        res = await axios.post("http://localhost:3000/api/admin/login", {
+          email,
+          password,
+        
+        });
+        location = "/admin/admindashboard";
       }
+  
+      const userdata = { email, password, role };
+  
+      login(userdata);
+        toast.success("Login Success");
+        navigate(location);
+  
     } catch (error) {
-      if (error.response) toast.error("Invalid Credentials.");
-      else if (error.request) toast.error("Server not started.");
-      else toast.error("Error occured in server.");
       setLoading(false);
+      
+      if (error.response) {
+        const status = error.response.status;
+        const message = error.response.data.message || "Something went wrong";
+  
+        if (status === 403) {
+          toast.error(message); // ✅ Now this will run
+        } else if (status === 404) {
+          toast.error("User not found or account deleted.");
+        } else if (status === 401) {
+          toast.error("Invalid credentials.");
+        } else {
+          toast.error(message);
+        }
+      } else if (error.request) {
+        toast.error("Server not responding. Is backend running?");
+      } else {
+        toast.error("Something went wrong. Please try again.");
+      }
     }
   };
-
+  
   return (
     <>
-      <div className="min-h-screen w-full flex justify-center items-center bg-gray-50">
+      <div className="min-h-screen w-full flex justify-center items-center bg-gray-100">
         <div className="w-[92vw] md:w-[86vw] lg:w-3/5 h-auto md:h-4/5 rounded-lg shadow-2xl flex md:flex-row overflow-hidden bg-white text-black">
           <div className="hidden md:block md:w-1/2">
             <img
-              src={loginside}
+              // src={loginside}
+              src="/loginside3.webp"
               alt="sideimage"
               className="w-full h-full object-cover"
             />
@@ -85,8 +130,8 @@ const Login = () => {
                   >
                     Email
                   </label>
-                  <div className="w-full">
-                    <label className="w-full input input-bordered flex items-center gap-2 border-1 border-black focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-400 bg-white text-black">
+                  <div className="w-full ">
+                    <label className="w-full input input-bordered flex items-center gap-2 border-1 border-black focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-400 bg-white text-black px-1 py-2 rounded-lg">
                       <svg
                         className="h-[1em] opacity-50"
                         xmlns="http://www.w3.org/2000/svg"
@@ -111,7 +156,7 @@ const Login = () => {
                       </svg>
                       <input
                         type="text"
-                        placeholder="Enter your username"
+                        placeholder="Enter your email."
                         required
                         className="w-full focus:outline-none"
                         onChange={(e) => setemail(e.target.value)}
@@ -128,7 +173,7 @@ const Login = () => {
                     Password
                   </label>
                   <div>
-                    <label className="w-full input input-bordered flex items-center gap-2 border-1 border-black focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-400 bg-white text-black">
+                    <label className="w-full input input-bordered flex items-center gap-2 border-1 border-black focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-400 bg-white text-black px-1 py-2 rounded-lg">
                       <svg
                         className="h-[1em] opacity-50"
                         xmlns="http://www.w3.org/2000/svg"
@@ -174,7 +219,8 @@ const Login = () => {
 
                 <div className="flex w-full my-4 sm:flex-row items-center">
                   <label className="mr-2">Are you a</label>
-                  <select className="ml-0 sm:ml-2 mt-2 sm:mt-0 outline-[2px] rounded-sm border border-gray-300 p-1">
+                  <select className="ml-0 sm:ml-2 mt-2 sm:mt-0 outline-[2px] rounded-sm border border-gray-300 p-1" onChange={(e)=>setRole(e.target.value)}
+                  >
                     {datas.role.map((data, index) => (
                       <option value={data} key={index}>
                         {data}

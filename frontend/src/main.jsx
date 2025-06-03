@@ -5,26 +5,34 @@ import "./index.css";
 import App from "./App.jsx";
 import { Toaster } from "react-hot-toast";
 
+import Login from "./pages/Login.jsx";
+import Register from "./pages/Register.jsx";
 // UserPanel
 import Userlayout from "./Userlayout.jsx";
 import Home from "./pages/patient/Home.jsx";
-import Login from "./pages/Login.jsx";
-import Register from "./pages/Register.jsx";
-
+import PatientSetting from "./pages/patient/PatientSetting.jsx";
+import PatientLocation from "./pages/patient/PatientLocation.jsx";
 // AdminPanel
 import Adminlayout from "./Adminlayout.jsx";
-import Dashboard from "./pages/doctor/DoctorDashboard.jsx";
+import AddDoctor from "./pages/admin/AddDocotor.jsx";
+import ManageDoctors from "./pages/admin/ManageDoctors.jsx";
+import ManagePatients from "./pages/admin/ManagePatients.jsx";
+import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
+import AdminSetting from "./pages/admin/AdminSetting.jsx";
+import BranchLocation from "./pages/admin/BranchLocation.jsx";
 import { AuthProvider } from "./Utils/AuthProvider.jsx";
 
 import ProtectedRoutes from "./Utils/ProtectedRoutes.jsx";
 import BookAppointment from "./pages/patient/BookAppointment.jsx";
-import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
 import PatientProfile from "./pages/patient/PatientProfile.jsx";
 import Doctorlayout from "./Doctorlayout.jsx";
 import DoctorProfile from "./pages/doctor/DoctorProfile.jsx";
 import Appointments from "./pages/doctor/Appointments.jsx";
 import Patients from "./pages/doctor/Patients.jsx";
 import Settings from "./pages/doctor/Settings.jsx";
+import About from "./pages/patient/About.jsx";
+import Service from "./pages/patient/Service.jsx";
+import { TotalAppointments } from "./pages/admin/TotalAppointments.jsx";
 
 const router = createBrowserRouter([
   {
@@ -35,51 +43,135 @@ const router = createBrowserRouter([
         path: "/",
         element: <Userlayout />,
         children: [
-          { path: "",
-            element: <Home />
-          },
+          { path: "", element: <Home /> },
+          { path: "/about", element: <About /> },
+          { path: "/service", element: <Service /> },
           {
             path: "profile",
-            element: <PatientProfile />,
+            element: (
+              <>
+                <ProtectedRoutes role="User">
+                  <PatientProfile />
+                </ProtectedRoutes>
+              </>
+            ),
+          },
+          {
+            path: "/patientsetting",
+            element: (
+              <>
+                <ProtectedRoutes role="User">
+                  <PatientSetting />
+                </ProtectedRoutes>
+              </>
+            ),
+          },
+          {
+            path: "/patientlocation",
+            element: (
+              <>
+                <ProtectedRoutes role="User">
+                  <PatientLocation />
+                </ProtectedRoutes>
+              </>
+            ),
           },
         ],
       },
       {
         path: "/doctor",
-        element: <Doctorlayout />,
+        element: (
+          <>
+            <ProtectedRoutes role="Doctor">
+              <Doctorlayout />
+            </ProtectedRoutes>
+          </>
+        ),
         children: [
           {
             path: "profile",
-            element:<DoctorProfile />,
+            element: <DoctorProfile />,
           },
           {
             path: "appointments",
-            element:<Appointments />,
+            element: <Appointments />,
           },
           {
             path: "patients",
-            element:<Patients />,
+            element: <Patients />,
           },
           {
             path: "settings",
-            element:<Settings />,
+            element: <Settings />,
           },
-          
+        ],
+      },
+      {
+        path: "/admin",
+        element: (
+          <>
+            {/* <ProtectedRoutes role="Admin"> */}
+            <Adminlayout />
+
+            {/* </ProtectedRoutes> */}
+          </>
+        ),
+
+        children: [
+          {
+            path: "admindashboard",
+            element: <AdminDashboard />,
+          },
+          {
+            path: "managedoctor",
+            element: <ManageDoctors />,
+          },
+          {
+            path: "totalappointment",
+            element: <TotalAppointments />,
+          },
+          {
+            path: "branchlocation",
+            element: <BranchLocation />,
+          },
+          {
+            path: "managepatients",
+            element: <ManagePatients />,
+          },
+          {
+            path: "adminsetting",
+            element: <AdminSetting />,
+          },
         ],
       },
       {
         path: "/login",
         element: <Login />,
       },
+
       {
         path: "/register",
         element: <Register />,
       },
+
       {
         path: "/bookappointment",
-        element: <BookAppointment />,
+        element: (
+          <>
+            <ProtectedRoutes role="User">
+            <BookAppointment />
+            </ProtectedRoutes>
+          </>
+        ),
       },
-     
+      {
+        path: "/adddoctor",
+        element: (
+          <>
+            <AddDoctor />
+          </>
+        ),
+      },
     ],
   },
 ]);
