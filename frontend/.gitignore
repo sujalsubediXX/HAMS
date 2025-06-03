@@ -26,4 +26,3 @@ dist-ssr
 # files to igonre when pushing data to github
 appointmentbooking.txt
 register.txt
-PatientProfile.jsx

@@ -33,6 +33,7 @@ import Settings from "./pages/doctor/Settings.jsx";
 import About from "./pages/patient/About.jsx";
 import Service from "./pages/patient/Service.jsx";
 import { TotalAppointments } from "./pages/admin/TotalAppointments.jsx";
+import Header from "./Components/Header.jsx";
 
 const router = createBrowserRouter([
   {
@@ -175,6 +176,10 @@ const router = createBrowserRouter([
     ],
   },
 ]);
+
+
+
+
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
