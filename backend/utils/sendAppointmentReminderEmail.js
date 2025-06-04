@@ -30,6 +30,7 @@ const sendAppointmentReminderEmail = async (patientEmail, patientName, doctorNam
           <p>Please arrive 10 minutes early and bring any previous medical documents.</p>
           <br/>
           <p>Regards,<br/>HAMS Team</p>
+          <p>Sujal Subedi and Nischal Shrestha Teams</p>
         </div>
       `,
     };

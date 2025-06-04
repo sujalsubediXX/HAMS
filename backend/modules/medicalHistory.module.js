@@ -9,6 +9,10 @@ const medicalHistorySchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Doctor"
   },
+  appointmentId:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "BookAppointments"
+  },
   doctorName: {
     type: String,
     required: true

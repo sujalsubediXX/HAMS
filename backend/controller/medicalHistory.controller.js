@@ -3,13 +3,14 @@ import BookAppointment from "../modules/bookAppointment.module.js";
 
 export const insertMedicalData = async (req, res) => {
   try {
-    const { patientID, doctorID, doctorName, diagnosis, treatment, _id } =
+    const { patientID, doctorID, doctorName, diagnosis, treatment, appointmentId } =
       req.body;
 
     // Create medical history record
     const createmedicaldata = await MedicalHistory.create({
       patientID,
       doctorID,
+      appointmentId,
       doctorName,
       diagnosis,
       treatment,
@@ -45,10 +46,10 @@ export const insertMedicalData = async (req, res) => {
 
 // PUT /api/medicalhistory/updateMedicalData
 export const UpatemedicalHistory = async (req, res) => {
-  const { _id, diagnosis, treatment } = req.body;
+  const { appointmentId, diagnosis, treatment } = req.body;
   try {
     const updated = await MedicalHistory.findOneAndUpdate(
-      { appointmentId: _id },
+      { appointmentId },
       { diagnosis, treatment },
       { new: true }
     );
