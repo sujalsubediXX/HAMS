@@ -6,19 +6,19 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { useAuth } from "../Utils/AuthProvider";
 const datas = {
-  role: ["User", "Doctor","Admin"],
+  role: ["User", "Doctor", "Admin"],
 };
 
 const Login = () => {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const { user, login } = useAuth();
   const [showPassword, setShowpassword] = useState(false);
-  const [role,setRole]=useState("User");
+  const [role, setRole] = useState("User");
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
   const [loading, setLoading] = useState(false);
   useEffect(() => {
-    setTimeout(()=>{
+    setTimeout(() => {
       if (user && user.role === "Doctor") {
         navigate("/doctor/profile");
       } else if (user && user.role === "User") {
@@ -26,7 +26,7 @@ const Login = () => {
       } else if (user && user.role === "Admin") {
         navigate("/admin/admindashboard");
       }
-    },3000)
+    }, 3000);
     if (user && user.role === "Doctor") {
       navigate("/doctor/profile");
     } else if (user && user.role === "User") {
@@ -35,50 +35,47 @@ const Login = () => {
       navigate("/admin/admindashboard");
     }
   }, [user]);
-  
 
   const setLogin = async () => {
     try {
       setLoading(true);
       let res = "";
       let location = "";
-  
+
       if (role === "User") {
         res = await axios.post("http://localhost:3000/api/user/login", {
           email,
           password,
-      
         });
         location = "/";
       } else if (role === "Doctor") {
         res = await axios.post("http://localhost:3000/api/doctor/login", {
           email,
           password,
-
         });
         location = "/doctor/profile";
       } else {
         res = await axios.post("http://localhost:3000/api/admin/login", {
           email,
           password,
-        
         });
         location = "/admin/admindashboard";
       }
-  
+
       const userdata = { email, password, role };
-  
+
       login(userdata);
-        toast.success("Login Success");
+      toast.success("Login Success");
+      setTimeout(() => {
         navigate(location);
-  
+      }, 2000);
     } catch (error) {
       setLoading(false);
-      
+
       if (error.response) {
         const status = error.response.status;
         const message = error.response.data.message || "Something went wrong";
-  
+
         if (status === 403) {
           toast.error(message); // ✅ Now this will run
         } else if (status === 404) {
@@ -95,7 +92,7 @@ const Login = () => {
       }
     }
   };
-  
+
   return (
     <>
       <div className="min-h-screen w-full flex justify-center items-center bg-gray-100">
@@ -219,7 +216,9 @@ const Login = () => {
 
                 <div className="flex w-full my-4 sm:flex-row items-center">
                   <label className="mr-2">Are you a</label>
-                  <select className="ml-0 sm:ml-2 mt-2 sm:mt-0 outline-[2px] rounded-sm border border-gray-300 p-1" onChange={(e)=>setRole(e.target.value)}
+                  <select
+                    className="ml-0 sm:ml-2 mt-2 sm:mt-0 outline-[2px] rounded-sm border border-gray-300 p-1"
+                    onChange={(e) => setRole(e.target.value)}
                   >
                     {datas.role.map((data, index) => (
                       <option value={data} key={index}>
@@ -235,8 +234,8 @@ const Login = () => {
                 >
                   {loading ? (
                     <span className="loading loading-spinner text-success"></span>
-                    // <span className="loading loading-dots loading-xl"></span>
                   ) : (
+                    // <span className="loading loading-dots loading-xl"></span>
                     "Login"
                   )}
                 </button>
