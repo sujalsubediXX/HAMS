@@ -7,7 +7,6 @@ import axios from "axios";
 
 const Register = () => {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState({});
   const [location, setLocation] = useState(null); // State to hold location
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -52,9 +51,7 @@ const Register = () => {
   const password = watch("password");
 
   const onSubmit = async (data) => {
-    setError({});
 
-    // Append location data if available
     if (location) {
       data.location = location;
     }

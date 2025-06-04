@@ -14,7 +14,6 @@ const TopBar = () => {
   const [previewImg, setPreviewImg] = useState(null);
   const fileInputRef = useRef(null);
 
-  // Fetch doctor data function - can be reused after image upload
   const fetchDoctorData = async () => {
     if (user?.email) {
       try {
@@ -28,19 +27,15 @@ const TopBar = () => {
     }
   };
 
-  // Load doctor data on mount and when user changes
   useEffect(() => {
     fetchDoctorData();
   }, [user]);
 
-  // Handle image file select and upload
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Preview the selected image immediately
       setPreviewImg(URL.createObjectURL(file));
 
-      // Prepare form data for upload
       const imagedata = new FormData();
       imagedata.append("image", file);
       imagedata.append("email", user.email);
@@ -54,7 +49,6 @@ const TopBar = () => {
 
         if (res.status === 201) {
           toast.success("Image inserted successfully.");
-          // Refresh doctor data so that new image info is shown
           fetchDoctorData();
         } else {
           toast.error("Image not inserted.");
@@ -68,7 +62,6 @@ const TopBar = () => {
     }
   };
 
-  // Trigger file input click when user clicks the container
   const handleImageClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();

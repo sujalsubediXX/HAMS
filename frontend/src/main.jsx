@@ -168,10 +168,10 @@ const router = createBrowserRouter([
         path: "/adddoctor",
         element: (
           <>
-          <ProtectedRoutes role="Admin">
+          {/* <ProtectedRoutes role="Admin"> */}
 
             <AddDoctor />
-          </ProtectedRoutes>
+          {/* </ProtectedRoutes> */}
           </>
         ),
       },

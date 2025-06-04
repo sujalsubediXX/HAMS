@@ -15,8 +15,8 @@ const DoctorSidebar = () => {
   const navigate = useNavigate();
   const handleLogout = () => {
     toast.success("Logout Success");
-    navigate("/");
     logout();
+    navigate("/");
   };
   return (
     <>

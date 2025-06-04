@@ -37,23 +37,7 @@ export const BranchLocation = () => {
   },[])
 
 
-//   const locations = [
-//     { name: "Kathmandu-MainHospital", lat: 27.7172, lng: 85.3240 },
-//     { name: "Lalitpur", lat: 27.6681, lng: 85.3206 },
-//     { name: "Bhaktapur", lat: 27.6711, lng: 85.4298 },
-//     { name: "Dhulikhel", lat: 27.6258, lng: 85.5352 },
-//     { name: "Banepa", lat: 27.6432, lng: 85.5210 },
-//     { name: "Kavrepalanchok", lat: 27.5536, lng: 85.5306 },
-//   ];
-  const branches = [
-    { name: "Kathmandu", lat: 27.7172, lng: 85.3240 },
-    { name: "Lalitpur", lat: 27.6681, lng: 85.3206 },
-    { name: "Bhaktapur", lat: 27.6711, lng: 85.4298 },
-    { name: "Dhulikhel", lat: 27.6258, lng: 85.5352 },
-    { name: "Banepa", lat: 27.6432, lng: 85.5210 },
-    { name: "Kavrepalanchok", lat: 27.5536, lng: 85.5306 },
-  ];
-  
+
   return (
     <main className="flex flex-col w-[86vw]">
       <h2 style={{ textAlign: "center", marginTop: "1rem" }}>
