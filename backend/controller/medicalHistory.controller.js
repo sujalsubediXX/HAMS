@@ -69,8 +69,8 @@ export const getMedicalhistory = async (req, res) => {
     if (doctorID) {
       data = await MedicalHistory.find({ doctorID });
     } else if (id) {
-      // Assuming 'id' here refers to a patientID or _id in your MedicalHistory schema
-      data = await MedicalHistory.find({ patientID: id }); // Or _id: id, depending on your schema
+     
+      data = await MedicalHistory.find({ patientID: id }); 
     }
 
     if (!data) return res.status(404).json({ message: "No record found." });

@@ -474,7 +474,13 @@ export const getappointmentdata = async (req, res) => {
   const { id } = req.query;
 
   try {
-    const data = await BookAppointment.find({ patientId: id });
+    let data;
+    if(req.query.id){
+       data = await BookAppointment.find({ patientId: id });
+    }else if(req.query.doctorID){
+      data = await BookAppointment.find({ doctorId: req.query.doctorID });
+    }
+   
     if (data) {
       return res.status(200).json({
         message: "Appointment data fetched successfully.",
@@ -489,51 +495,26 @@ export const getappointmentdata = async (req, res) => {
   }
 };
 
-export const getappointmentQuery = async (req, res) => {
-  const { doctorID } = req.query;
-
-  if (!doctorID) {
-    return res.status(400).json({ message: "doctorID is required in query." });
-  }
-
-  try {
-    const appointmentinfo = await BookAppointment.find({ doctorId: doctorID });
-
-    if (appointmentinfo.length > 0) {
-      return res.status(200).json({
-        message: "Appointments fetched successfully.",
-        data: appointmentinfo,
-      });
-    } else {
-      return res
-        .status(404)
-        .json({ message: "No appointments found for this doctor.", data: [] });
-    }
-  } catch (error) {
-    console.error("Appointment fetch error:", error);
-    return res.status(500).json({ error: "Appointment data fetching error." });
-  }
-};
 
 export const patientByDoctorEmail = async (req, res) => {
   const email = req.query.email;
 
   try {
-    // Step 1: Find doctor by email
+ 
     const doctor = await Doctor.findOne({ email });
     if (!doctor) {
       return res.status(404).json({ error: "Doctor not found" });
     }
 
-    // Step 2: Get appointments where doctorId matches
+   
     const appointments = await BookAppointment.find({ doctorId: doctor._id });
 
-    // Step 3: Extract unique patient IDs
+
     const patientIds = [
       ...new Set(appointments.map((app) => app.patientId.toString())),
     ];
 
-    // Step 4: Fetch patients
+
     const patients = await User.find({ _id: { $in: patientIds } });
     res.json({ data: patients });
   } catch (error) {
@@ -543,7 +524,7 @@ export const patientByDoctorEmail = async (req, res) => {
 };
 
 export const getAppointmentStats = async (req, res) => {
-  // Your logic here, maybe:
+ 
   try {
     const pendingCount = await BookAppointment.countDocuments({
       status: "pending",
@@ -596,27 +577,27 @@ export const chartdayData = async (req, res) => {
     const appointments = await BookAppointment.find();
 
     const today = new Date();
-    // Reset time to 00:00:00 to compare dates without time part
+
     today.setHours(0, 0, 0, 0);
 
     const next7Days = new Date(today);
-    next7Days.setDate(today.getDate() + 6); // today + 6 = 7 days total
+    next7Days.setDate(today.getDate() + 6); 
 
-    // Filter appointments only within the 7-day window (today to next 6 days)
+
     const filteredAppointments = appointments.filter((appointment) => {
       const appointmentDate = new Date(appointment.date);
       appointmentDate.setHours(0, 0, 0, 0);
       return appointmentDate >= today && appointmentDate <= next7Days;
     });
 
-    // Group filtered appointments by date (YYYY-MM-DD)
+  
     const grouped = filteredAppointments.reduce((acc, appointment) => {
       const date = new Date(appointment.date).toISOString().split("T")[0];
       acc[date] = (acc[date] || 0) + 1;
       return acc;
     }, {});
 
-    // Create result array for each day in the 7-day window, fill missing dates with 0 count
+
     const result = [];
     for (let i = 0; i < 7; i++) {
       const currentDate = new Date(today);
@@ -628,7 +609,6 @@ export const chartdayData = async (req, res) => {
       });
     }
 
-    // Return the formatted 7-day data array
     res.json(result);
   } catch (err) {
     console.error("Failed to fetch appointments:", err);
@@ -639,14 +619,14 @@ export const chartDoctorAppointments = async (req, res) => {
   try {
     const appointments = await BookAppointment.find();
 
-    // Group by doctorName and count appointments
+
     const grouped = appointments.reduce((acc, appointment) => {
       const doctor = appointment.doctorName || "Unknown";
       acc[doctor] = (acc[doctor] || 0) + 1;
       return acc;
     }, {});
 
-    // Convert to array for frontend chart
+
     let formattedData = Object.entries(grouped).map(([doctorName, count]) => ({
       doctorName,
       count,
@@ -669,7 +649,7 @@ export const CancelAppointment = async (req, res) => {
     const appointment = await BookAppointment.findByIdAndUpdate(
       _id,
       { $set: { status: "cancelled" } },
-      { new: true } // This works with findByIdAndUpdate, not updateOne
+      { new: true } 
     );
 
     if (appointment) {

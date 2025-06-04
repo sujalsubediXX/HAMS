@@ -1,11 +1,11 @@
 import express from "express";
-import { loginuser, registeruser ,userdata,queryuser,UserImage,UpdatePassword,deleteAccount,getGenderStats,getAgeStats,ChangeLocation,getUserLocation,updateProfile} from "../controller/user.controller.js";
+import { loginuser, registeruser ,userdata,UserImage,UpdatePassword,deleteAccount,getGenderStats,getAgeStats,ChangeLocation,getUserLocation,updateProfile} from "../controller/user.controller.js";
 const router = express.Router();
 import { Upload } from "../upload.js";
 router.post("/login", loginuser);
 router.post("/register", registeruser);
 router.get("/userdata",userdata);
-router.get("/userdataquery",queryuser);
+
 router.post("/insertimage",Upload.single("image"),UserImage);
 router.put("/updatepassword",UpdatePassword);
 router.delete("/deleteaccount",deleteAccount);
@@ -13,5 +13,6 @@ router.get('/gender-stats', getGenderStats);
 router.get('/getAgeStats', getAgeStats);
 router.put('/changelocation', ChangeLocation);
 router.get('/getuserlocation', getUserLocation);
-router.post("/updateprofile",updateProfile)
+router.put("/updateprofile",updateProfile)
+
 export default router;

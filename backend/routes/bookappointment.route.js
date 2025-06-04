@@ -1,10 +1,10 @@
 import express from "express";
-import {bookAppointment,getappointmentdata,getappointmentQuery,patientByDoctorEmail,getAppointmentStats,getTopSpecialties,chartdayData,chartDoctorAppointments,CancelAppointment,getDoctorTimeSlots,rescheduleAppointment,matchDoctors} from "../controller/bookappointment.controller.js"
+import {bookAppointment,getappointmentdata,patientByDoctorEmail,getAppointmentStats,getTopSpecialties,chartdayData,chartDoctorAppointments,CancelAppointment,getDoctorTimeSlots,rescheduleAppointment,matchDoctors} from "../controller/bookappointment.controller.js"
 
 const route=express.Router();
 route.post("/bookappointment",bookAppointment);
 route.get("/getappointment",getappointmentdata);
-route.get("/getappointmentQuery",getappointmentQuery);
+
 route.get("/patients-by-doctor-email",patientByDoctorEmail);
 route.get("/appointmentstats",getAppointmentStats);
 route.get("/getTopSpecialties",getTopSpecialties);

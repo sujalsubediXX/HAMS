@@ -4,7 +4,16 @@ import bcrypt from "bcryptjs";
 // Register User
 export const registeruser = async (req, res) => {
   try {
-    const { age, email, firstName, gender, lastName, password, phonenumber, location } = req.body;
+    const {
+      age,
+      email,
+      firstName,
+      gender,
+      lastName,
+      password,
+      phonenumber,
+      location,
+    } = req.body;
 
     const ifexistuser = await User.findOne({ email });
 
@@ -50,9 +59,13 @@ export const loginuser = async (req, res) => {
         return res.status(404).json({ message: "User not found" });
       }
       if (!user.isActive) {
-        return res.status(403).json({ message: "Your account was deleted. Please contact admin for further assistance." });
+        return res
+          .status(403)
+          .json({
+            message:
+              "Your account was deleted. Please contact admin for further assistance.",
+          });
       }
-  
 
       const isMatch = await bcrypt.compare(password, user.password);
 
@@ -72,7 +85,12 @@ export const loginuser = async (req, res) => {
 
 export const userdata = async (req, res) => {
   try {
-    const userinfo = await User.find();
+    let userinfo = [];
+    if (req.query.email) {
+      userinfo = await User.findOne({ email: req.query.email });
+    } else {
+      userinfo = await User.find();
+    }
     if (userinfo) {
       return res
         .status(200)
@@ -82,22 +100,6 @@ export const userdata = async (req, res) => {
     }
   } catch (error) {
     return res.status(400).json({ message: "Fetched user data failed", error });
-  }
-};
-export const queryuser = async (req, res) => {
-  const { email } = req.query;
-
-
-  try {
-    const user = await User.findOne({ email });
-    if (user) {
-      return res.status(200).json({ message: "User data from query", data: user });
-    } else {
-      return res.status(404).json({ message: "User not found" });
-    }
-  } catch (error) {
-    console.error("Error fetching user:", error);
-    return res.status(500).json({ message: "Error fetching user" });
   }
 };
 
@@ -120,7 +122,9 @@ export const UserImage = async (req, res) => {
     );
 
     if (updated.modifiedCount > 0) {
-      res.status(201).json({ message: "Image uploaded successfully", imageUrl });
+      res
+        .status(201)
+        .json({ message: "Image uploaded successfully", imageUrl });
     } else {
       res.status(400).json({ message: "User not found or image not updated" });
     }
@@ -129,34 +133,42 @@ export const UserImage = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
- export const UpdatePassword=async(req,res)=>{
+export const UpdatePassword = async (req, res) => {
   try {
-    const {email,pass,cpass}=req.body;
-    const existUser=await User.findOne({email});
-    if(existUser){
-      const matchpassword=await bcrypt.compare(pass,existUser.password);
-      if(matchpassword){
-        const salt=await bcrypt.genSalt(10);
-        const hashpassword=await bcrypt.hash(cpass,salt);
-         const update=await User.updateOne({
-          email
-         },
-        {
-          password:hashpassword
-        });
-        if(update){
-          return res.status(200).json({message:"Password update Successfully"});
+    const { email, pass, cpass } = req.body;
+    const existUser = await User.findOne({ email });
+    if (existUser) {
+      const matchpassword = await bcrypt.compare(pass, existUser.password);
+      if (matchpassword) {
+        const salt = await bcrypt.genSalt(10);
+        const hashpassword = await bcrypt.hash(cpass, salt);
+        const update = await User.updateOne(
+          {
+            email,
+          },
+          {
+            password: hashpassword,
+          }
+        );
+        if (update) {
+          return res
+            .status(200)
+            .json({ message: "Password update Successfully" });
         }
-      }else{
-        return res.status(400).json({message:"The password you have provided is invalid"});
+      } else {
+        return res
+          .status(400)
+          .json({ message: "The password you have provided is invalid" });
       }
     }
   } catch (error) {
-    return res.status(402).json({message:"Error occured in update password",error});
+    return res
+      .status(402)
+      .json({ message: "Error occured in update password", error });
   }
- }
+};
 
- export const deleteAccount = async (req, res) => {
+export const deleteAccount = async (req, res) => {
   try {
     const { email } = req.body;
 
@@ -174,13 +186,12 @@ export const UserImage = async (req, res) => {
 };
 // controllers/userController.js
 
-
 export const getGenderStats = async (req, res) => {
-   // Your logic here, maybe:
-   try {
-    const maleCount = await User.countDocuments({ gender: 'male' });
-    const femaleCount = await User.countDocuments({ gender: 'female' });
-    const otherCount = await User.countDocuments({ gender: 'other' });
+  // Your logic here, maybe:
+  try {
+    const maleCount = await User.countDocuments({ gender: "male" });
+    const femaleCount = await User.countDocuments({ gender: "female" });
+    const otherCount = await User.countDocuments({ gender: "other" });
 
     res.status(200).json({
       male: maleCount,
@@ -188,7 +199,7 @@ export const getGenderStats = async (req, res) => {
       other: otherCount,
     });
   } catch (error) {
-    res.status(500).json({ error: 'Server error while fetching gender stats' });
+    res.status(500).json({ error: "Server error while fetching gender stats" });
   }
 };
 
@@ -211,10 +222,6 @@ export const getAgeStats = async (req, res) => {
   }
 };
 
-
-
-
-
 export const ChangeLocation = async (req, res) => {
   try {
     const { id, location } = req.body;
@@ -226,39 +233,52 @@ export const ChangeLocation = async (req, res) => {
     );
 
     if (updatedUser) {
-      return res.status(200).json({ message: "Location updated successfully", user: updatedUser });
+      return res
+        .status(200)
+        .json({ message: "Location updated successfully", user: updatedUser });
     } else {
       return res.status(404).json({ message: "User not found" });
     }
-
   } catch (error) {
     console.error("Error updating location:", error);
-    return res.status(500).json({ message: "Location update failed", error: error.message });
+    return res
+      .status(500)
+      .json({ message: "Location update failed", error: error.message });
   }
 };
 
-
-export const getUserLocation=async(req,res)=>{
+export const getUserLocation = async (req, res) => {
   try {
-    const {email}=req.query;
-        const patient=await User.findOne({email});
-        return res.status(200).json({data:patient.location});
-        console.log(patient)
+    const { email } = req.query;
+    const patient = await User.findOne({ email });
+    return res.status(200).json({ data: patient.location });
   } catch (error) {
-    console.log("Error in fetching user location")
-    return res.status(400).json({message:"Error in fetching user location"});
+    console.log("Error in fetching user location");
+    return res.status(400).json({ message: "Error in fetching user location" });
+  }
+};
+
+export const updateProfile = async (req, res) => {
+  try {
+    const { updatedata } = req.body;
     
-  }
-}
-
-export const updateProfile=async(req,res)=>{
-  try {
-      const {formdata}=req.body;
-      // return res.status(200)
-      console.log(formdata.firstName)
-
-
+    const updateUser = await User.findOneAndUpdate(
+      { email: updatedata.oldemail },
+      {
+        firstName: updatedata.firstName,
+        lastName: updatedata.lastName,
+        email: updatedata.email,
+        gender: updatedata.gender,
+        age: updatedata.age,
+        phone: updatedata.phone,
+      },
+      { new: true } 
+    );
+    if(updateUser){
+      return res.status(200).json({messsage:"User data updated."})
+    }
   } catch (error) {
-      console.log(error)
+    console.log(error);
+    return res.status(400).json({messsage:"User data not updated."})
   }
-}
+};

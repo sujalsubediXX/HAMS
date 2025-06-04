@@ -3,7 +3,6 @@ import Doctor from "../modules/doctor.module.js";
 
 import sendDoctorWelcomeEmail from "../utils/sendDoctorWelcomeEmail.js";
 
-
 // Helper function to create hourly slots
 const generateTimeSlots = (start, end) => {
   const slots = [];
@@ -14,13 +13,13 @@ const generateTimeSlots = (start, end) => {
   const endTime = new Date(1970, 0, 1, endHour, endMinute);
 
   while (current < endTime) {
-    const next = new Date(current.getTime() + 30 * 60 * 1000); 
+    const next = new Date(current.getTime() + 30 * 60 * 1000);
 
     if (next <= endTime) {
       const from = current.toTimeString().slice(0, 5);
       const to = next.toTimeString().slice(0, 5);
 
-      slots.push({ start: from, end: to, isBooked: false }); 
+      slots.push({ start: from, end: to, isBooked: false });
     }
 
     current = next;
@@ -49,7 +48,8 @@ export const appointDoctor = async (req, res) => {
     } = req.body;
 
     // Generate random password
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+    const chars =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
     let password = "";
     for (let i = 0; i < 10; i++) {
       password += chars[Math.floor(Math.random() * chars.length)];
@@ -61,7 +61,7 @@ export const appointDoctor = async (req, res) => {
 
     // Generate timeSlots
     const generatedTimeSlots = generateTimeSlots(slots[0].start, slots[0].end);
-console.log(password)
+    console.log(password);
     const newDoctor = new Doctor({
       name,
       email,
@@ -81,10 +81,8 @@ console.log(password)
       timeSlots: generatedTimeSlots, // ⬅️ Add to schema too!
     });
 
-    
-
     await newDoctor.save();
-    sendDoctorWelcomeEmail(email,name,password);
+    sendDoctorWelcomeEmail(email, name, password);
     // console.log(password)
 
     res.status(200).json({ message: "Doctor created successfully", password });
@@ -94,36 +92,30 @@ console.log(password)
   }
 };
 
-
-export const getDoctorInfo=async(req,res)=>{
+export const getDoctorInfo = async (req, res) => {
   try {
-    const doctorinfo=await Doctor.find();
-    if(doctorinfo){
-      return res.status(200).json({message:"Doctor data accessed.",data:doctorinfo})
-    }else{
-      return res.status(400).json({message:"Failed fetching doctor data."})
+    let doctorinfo = [];
+    if (req.query.email) {
+      doctorinfo = await Doctor.findOne({ email: req.query.email });
+    } else if (req.query.specialty) {
+      doctorinfo = await Doctor.find({ specialization: { $in: [req.query.specialty] } });
+    } else if (req.query.id) {
+      doctorinfo = await Doctor.find({ _id: req.query.id });
+    } else {
+      doctorinfo = await Doctor.find();
+    }
+    if (doctorinfo) {
+      return res
+        .status(200)
+        .json({ message: "Doctor data accessed.", data: doctorinfo });
+    } else {
+      return res.status(400).json({ message: "Failed fetching doctor data." });
     }
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "doctor data fetching error" });
   }
-
-}
-export const getdoctordataQuery=async(req,res)=>{
-  const {email}=req.query;
-  try {
-    const doctorinfo=await Doctor.findOne({email});
-    if(doctorinfo){
-      return res.status(200).json({message:"Doctor data accessed.",data:doctorinfo})
-    }else{
-      return res.status(400).json({message:"Failed fetching doctor data."})
-    }
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "doctor data fetching error" });
-  }
-
-}
+};
 
 export const loginDoctor = async (req, res) => {
   try {
@@ -136,7 +128,9 @@ export const loginDoctor = async (req, res) => {
     }
 
     if (!doctorinfo.isActive) {
-      return res.status(403).json({ message: "Your account is deactivated. Please contact admin." });
+      return res.status(403).json({
+        message: "Your account is deactivated. Please contact admin.",
+      });
     }
 
     const isMatch = await bcrypt.compare(password, doctorinfo.password);
@@ -150,48 +144,35 @@ export const loginDoctor = async (req, res) => {
     return res.status(200).json({
       message: "Login success for doctor",
       doctor: {
-
         name: doctorinfo.name,
         email: doctorinfo.email,
         role: "Doctor",
       },
     });
-
   } catch (error) {
     console.error("Error in doctor login:", error);
-    return res.status(500).json({ message: "Internal Server Error in doctor login" });
+    return res
+      .status(500)
+      .json({ message: "Internal Server Error in doctor login" });
   }
 };
 
+// export const doctorSpeciality = async (req, res) => {
+//   const { specialty } = req.query;
+//   try {
+//     const doctors = await Doctor.find({ specialization: { $in: [specialty] } });
+//     res.status(200).json(doctors);
+//   } catch (error) {
+//     console.error("Error fetching doctors:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// };
 
-export const doctorSpeciality=async (req, res) => {
-  const { specialty } = req.query;
-  try {
-    const doctors = await Doctor.find({ specialization: { $in: [specialty] } });
-    res.status(200).json(doctors);
-  } catch (error) {
-    console.error("Error fetching doctors:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-};
-export const doctorById=async (req, res) => {
-  const { id } = req.query;
-  if(!id){
-    return res.status(400).json({message:"No doctor id"})
-  }
-  try {
-    const doctors = await Doctor.find({_id:id});
-    res.status(200).json({message:"Doctordata",data:doctors});
-  } catch (error) {
-    console.error("Error fetching doctors:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-};
 
 // export const UpdatePassword=async(req,res)=>{
 //   try {
 //     const {email,pass}=req.body;
-   
+
 //         const salt=await bcrypt.genSalt(10);
 //         const hashpassword=await bcrypt.hash(pass,salt);
 //          const update=await Doctor.updateOne({
@@ -208,35 +189,43 @@ export const doctorById=async (req, res) => {
 //     return res.status(402).json({message:"Error occured in update password",error});
 //   }
 //  }
- 
-export const UpdatePassword=async(req,res)=>{
+
+export const UpdatePassword = async (req, res) => {
   try {
-    const {email,pass,cpass}=req.body;
-    const existUser=await Doctor.findOne({email});
-    if(existUser){
-      const matchpassword=await bcrypt.compare(pass,existUser.password);
-      if(matchpassword){
-        const salt=await bcrypt.genSalt(10);
-        const hashpassword=await bcrypt.hash(cpass,salt);
-         const update=await Doctor.updateOne({
-          email
-         },
-        {
-          password:hashpassword
-        });
-        if(update){
-          return res.status(200).json({message:"Password update Successfully"});
+    const { email, pass, cpass } = req.body;
+    const existUser = await Doctor.findOne({ email });
+    if (existUser) {
+      const matchpassword = await bcrypt.compare(pass, existUser.password);
+      if (matchpassword) {
+        const salt = await bcrypt.genSalt(10);
+        const hashpassword = await bcrypt.hash(cpass, salt);
+        const update = await Doctor.updateOne(
+          {
+            email,
+          },
+          {
+            password: hashpassword,
+          }
+        );
+        if (update) {
+          return res
+            .status(200)
+            .json({ message: "Password update Successfully" });
         }
-      }else{
-        return res.status(400).json({message:"The password you have provided is invalid"});
+      } else {
+        return res
+          .status(400)
+          .json({ message: "The password you have provided is invalid" });
       }
     }
   } catch (error) {
-    return res.status(402).json({message:"Error occured in update password",error});
+    return res
+      .status(402)
+      .json({ message: "Error occured in update password", error });
   }
- }
+};
 
- export const DoctordeleteAccount = async (req, res) => {
+export const DoctordeleteAccount = async (req, res) => {
   try {
     const { email } = req.body;
 
@@ -253,7 +242,7 @@ export const UpdatePassword=async(req,res)=>{
   }
 };
 
-export const doctorimageUpload=async (req, res) => {
+export const doctorimageUpload = async (req, res) => {
   try {
     const { email } = req.body;
     const imagefile = req.file;
@@ -270,7 +259,9 @@ export const doctorimageUpload=async (req, res) => {
     );
 
     if (updated.modifiedCount > 0) {
-      res.status(201).json({ message: "Image uploaded successfully", imageUrl });
+      res
+        .status(201)
+        .json({ message: "Image uploaded successfully", imageUrl });
     } else {
       res.status(400).json({ message: "User not found or image not updated" });
     }
@@ -279,5 +270,3 @@ export const doctorimageUpload=async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
-
-
