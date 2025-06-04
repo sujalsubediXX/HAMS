@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import loginside from "/loginside.webp";
+
 import { Link, useNavigate } from "react-router-dom";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import toast from "react-hot-toast";
