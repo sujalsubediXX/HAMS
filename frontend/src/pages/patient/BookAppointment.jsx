@@ -8,7 +8,6 @@ import doctorSpecialties from "../../Utils/Symptoms.js";
 
 export default function BookAppointment() {
   const navigate = useNavigate();
-  const [doctor, setDoctor] = useState([]);
   const [patient, setPatient] = useState({});
   const [step, setStep] = useState(1);
   const [symptom, setSymptom] = useState("");
@@ -35,20 +34,6 @@ export default function BookAppointment() {
     .toISOString()
     .split("T")[0];
 
-  // Fetch all doctors initially
-  useEffect(() => {
-    const doctorinfo = async () => {
-      try {
-        const res = await axios.get("http://localhost:3000/api/doctor/doctordata");
-        if (res && res.data) {
-          setDoctor(res.data);
-        }
-      } catch (error) {
-        console.log("Failed to fetch doctor data", error);
-      }
-    };
-    doctorinfo();
-  }, []);
 
   // Fetch patient info from localStorage after login
   useEffect(() => {

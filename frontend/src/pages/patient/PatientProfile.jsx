@@ -4,7 +4,6 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import ConfirmAlert from "../../Components/ConfirmAlert.jsx";
 const PatientProfile = () => {
-  const [loguser, setLoguser] = useState(null);
   const [uservalue, setuservalue] = useState(null);
   const [showRescheduleModal, setShowRescheduleModal] = useState(false);
   const [docID, setDocID] = useState("");
@@ -18,12 +17,12 @@ const PatientProfile = () => {
   const [profileimage, setProfileimage] = useState("");
   const [confirm, setConfirm] = useState(false);
   const [cancelid, setcancelid] = useState("");
-  const [location, setLocation] = useState(null);
   const [availabledays, setavailabledays] = useState([]);
   const [showallappointment, setShowallAppointment] = useState(true);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
+    oldemail:"",
     email: "",
     phone: "",
     gender: "",
@@ -39,7 +38,7 @@ const PatientProfile = () => {
     doctorID: "",
     patientID: "",
   });
-const navigate=useNavigate();
+  const navigate = useNavigate();
   const today = new Date(Date.now() + 24 * 60 * 60 * 1000)
     .toISOString()
     .split("T")[0];
@@ -51,28 +50,19 @@ const navigate=useNavigate();
     const localdata = localStorage.getItem("Users");
     if (localdata) {
       const user = JSON.parse(localdata);
-      setLoguser(user);
-      setFormData((prev) => ({
-        ...prev,
-        firstName: user.firstName || "",
-        lastName: user.lastName || "",
-        email: user.email || "",
-        phone: user.phone || "",
-        gender: user.gender || "",
-        age: user.age || "",
-        image: user.image || "",
-      }));
+     
 
       const fetchUserData = async () => {
         try {
           const res = await axios.get(
-            `http://localhost:3000/api/user/userdataquery?email=${user.email}`
+            `http://localhost:3000/api/user/userdata?email=${user.email}`
           );
           if (res.data?.data) {
             setuservalue(res.data.data);
             setFormData({
               firstName: res.data.data.firstName || "",
               lastName: res.data.data.lastName || "",
+              oldemail: res.data.data.email || "",
               email: res.data.data.email || "",
               phone: res.data.data.phone || "",
               gender: res.data.data.gender || "",
@@ -156,21 +146,27 @@ const navigate=useNavigate();
     }
   }, [showRescheduleModal, docID, rescheduledata.date]);
 
-  const handleInputChange = (e) => {
+  const  handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
     console.log(formData.firstName, "no");
     try {
-      const res = await axios.post(
+      const res = await axios.put(
         "http://localhost:3000/api/user/updateprofile",
-        formData
+       { updatedata:formData}
       );
-      localStorage.setItem("Users", JSON.stringify(formData));
+      if(res.status==200){
+        const updateData={
+          email:formData.email,
+           role:"User"
+
+        }
+        localStorage.setItem("Users", JSON.stringify(updateData));
+      }
       setEditable(false);
       setShowAlert(true);
       setTimeout(() => setShowAlert(false), 3000);
@@ -200,7 +196,7 @@ const navigate=useNavigate();
           setFormData((prev) => ({ ...prev, image: res.data.image }));
           setProfileimage("");
           fileInputRef.current.value = "";
-          navigate("/profile")
+          navigate("/profile");
         } else {
           toast.error("Image not inserted.");
         }
@@ -304,7 +300,6 @@ const navigate=useNavigate();
       const pos = await getPosition();
       const { latitude, longitude } = pos.coords;
 
-      setLocation({ lat: latitude, lng: longitude });
       try {
         const res = await axios.put(
           "http://localhost:3000/api/user/changelocation",
@@ -332,7 +327,7 @@ const navigate=useNavigate();
     console.log(id);
     try {
       const res = await axios.get(
-        `http://localhost:3000/api/doctor/doctor_id?id=${id}`
+        `http://localhost:3000/api/doctor/doctordata?id=${id}`
       );
       if (res.status == 200) {
         setavailabledays(res.data.data[0].availableDays);
@@ -436,7 +431,8 @@ const navigate=useNavigate();
                     </p>
                     <p>
                       <strong className="text-gray-700">Gender:</strong>{" "}
-                      {formData.gender}
+                      {formData.gender.slice(0, 1).toUpperCase() +
+                        formData.gender.slice(1)}
                     </p>
                     <p>
                       <strong className="text-gray-700">Age:</strong>{" "}
@@ -665,15 +661,19 @@ const navigate=useNavigate();
                 className="w-full p-2 my-3 border rounded"
                 required
               />
-              <input
-                type="text"
+
+              <select
                 name="gender"
                 value={formData.gender}
                 onChange={handleInputChange}
-                placeholder="Gender"
                 className="w-full p-2 my-3 border rounded"
                 required
-              />
+              >
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+
               <input
                 type="number"
                 name="age"

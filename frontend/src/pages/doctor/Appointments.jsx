@@ -26,7 +26,7 @@ const Appointments = () => {
     const fetchDoctorData = async () => {
       if (user?.email) {
         try {
-          const res = await axios.get(`http://localhost:3000/api/doctor/doctordataquery?email=${user.email}`);
+          const res = await axios.get(`http://localhost:3000/api/doctor/doctordata?email=${user.email}`);
           if (res.status === 200) {
             setDoctordata(res.data.data);
           }
@@ -43,9 +43,9 @@ const Appointments = () => {
     const fetchAppointments = async () => {
       if (doctordata?._id) {
         try {
-          const res = await axios.get(`http://localhost:3000/api/appointment/getappointmentQuery?doctorID=${doctordata._id}`);
+          const res = await axios.get(`http://localhost:3000/api/appointment/getappointment?doctorID=${doctordata._id}`);
           if (res.status === 200) {
-            setAppointmentdata(res.data.data);
+            setAppointmentdata(res.data.appointment);
           }
         } catch (err) {
           console.error("Error fetching appointment data:", err);

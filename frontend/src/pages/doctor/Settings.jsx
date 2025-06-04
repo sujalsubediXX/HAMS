@@ -52,36 +52,19 @@ const Settings = () => {
     }
   };
 
-  // useEffect(() => {
-  //   const fetchdata = async () => {
-  //     if (user?.email) {
-  //       try {
-  //         const res = await axios.get(
-  //           `/api/doctor/doctordataquery?email=${user.email}`
-  //         );
-  //         if (res.status === 200) {
-  //           setDoctordata(res.data.data);
-  //         }
-  //       } catch (err) {
-  //         console.error("Error fetching doctor data:", err);
-  //       }
-  //     }
-  //   };
-
-  //   fetchdata();
-  // }, [user]);
+ 
 
   const handledelete = async () => {
     try {
       const res = await axios.delete("http://localhost:3000/api/doctor/deleteaccount", {
-        data: { email: user.email }, // ✅ pass data here properly
+        data: { email: user.email },
       });
 
       if (res.status === 201) {
         toast.success("Your account was deleted Successfully.");
         logout();
         navigate("/");
-        // Optionally log the user out and redirect
+    
       } else {
         toast.error("Account not deleted.");
       }

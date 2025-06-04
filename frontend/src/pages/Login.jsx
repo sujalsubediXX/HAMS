@@ -62,7 +62,7 @@ const Login = () => {
         location = "/admin/admindashboard";
       }
 
-      const userdata = { email, password, role };
+      const userdata = { email, role };
 
       login(userdata);
       toast.success("Login Success");
@@ -233,9 +233,9 @@ const Login = () => {
                   className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition duration-300 font-semibold cursor-pointer"
                 >
                   {loading ? (
-                    <span className="loading loading-spinner text-success"></span>
+                    "logging..."
                   ) : (
-                    // <span className="loading loading-dots loading-xl"></span>
+                   
                     "Login"
                   )}
                 </button>

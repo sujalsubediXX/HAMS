@@ -1,8 +1,12 @@
-import React from "react";
-export const TotalAppointments = () => {
+import React from 'react'
+
+const TotalAppointments = () => {
   return (
-    <>
-      <h1>This is TotalAppointments page from admin side.</h1>
-    </>
-  );
-};
+    <div>
+      This is total appointment page
+      
+    </div>
+  )
+}
+
+export default TotalAppointments

@@ -32,8 +32,7 @@ import Patients from "./pages/doctor/Patients.jsx";
 import Settings from "./pages/doctor/Settings.jsx";
 import About from "./pages/patient/About.jsx";
 import Service from "./pages/patient/Service.jsx";
-import { TotalAppointments } from "./pages/admin/TotalAppointments.jsx";
-import Header from "./Components/Header.jsx";
+import TotalAppointments  from "./pages/admin/TotalAppointments.jsx";
 
 const router = createBrowserRouter([
   {
@@ -160,7 +159,7 @@ const router = createBrowserRouter([
         element: (
           <>
             <ProtectedRoutes role="User">
-            <BookAppointment />
+              <BookAppointment />
             </ProtectedRoutes>
           </>
         ),
@@ -169,17 +168,16 @@ const router = createBrowserRouter([
         path: "/adddoctor",
         element: (
           <>
+          <ProtectedRoutes role="Admin">
+
             <AddDoctor />
+          </ProtectedRoutes>
           </>
         ),
       },
     ],
   },
 ]);
-
-
-
-
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

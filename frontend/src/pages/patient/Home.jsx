@@ -26,7 +26,6 @@ const Home = () => {
     });
   };
 
-
   return (
     <div className="w-full pt-[16vh]">
       <div
@@ -44,7 +43,7 @@ const Home = () => {
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-blue-800 leading-tight mb-6">
               Your Health, <span className="text-blue-500">Our Priority</span>
             </h1>
-        
+
             <p className="text-gray-600 text-base sm:text-lg mb-6 px-2 sm:px-0">
               Welcome to a smarter way to manage your health. Schedule
               appointments, track wellness, and get care from trusted
