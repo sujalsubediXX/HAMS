@@ -83,8 +83,7 @@ export const appointDoctor = async (req, res) => {
 
     await newDoctor.save();
     sendDoctorWelcomeEmail(email, name, password);
-    // console.log(password)
-
+   
     res.status(200).json({ message: "Doctor created successfully", password });
   } catch (error) {
     console.error("Error creating doctor:", error);
@@ -156,17 +155,6 @@ export const loginDoctor = async (req, res) => {
       .json({ message: "Internal Server Error in doctor login" });
   }
 };
-
-// export const doctorSpeciality = async (req, res) => {
-//   const { specialty } = req.query;
-//   try {
-//     const doctors = await Doctor.find({ specialization: { $in: [specialty] } });
-//     res.status(200).json(doctors);
-//   } catch (error) {
-//     console.error("Error fetching doctors:", error);
-//     res.status(500).json({ error: "Internal Server Error" });
-//   }
-// };
 
 
 // export const UpdatePassword=async(req,res)=>{

@@ -123,44 +123,6 @@ export const getDoctorTimeSlots = async (req, res) => {
   }
 };
 
-// const calculateDistance = (loc1, loc2) => {
-//   const dx = loc1.lat - loc2.lat;
-//   const dy = loc1.lng - loc2.lng;
-//   return Math.sqrt(dx * dx + dy * dy);
-// };
-
-// const sujaldata = {
-//   lat: 27.736217,
-//   lng: 85.3013318,
-// };
-// const atuldata = {
-//   lat: 29.967,
-//   lng: 81.817,
-// };
-// const ram = {
-//   lat: 27.5213,
-//   lng: 85.5362,
-// };
-// const sujaldoc = {
-//   lat: 27.7172,
-//   lng: 85.324,
-// };
-// const ritadoc = {
-//   lat: 27.6213,
-//   lng: 85.5362,
-// };
-// const mikedoc = {
-//   lat: 27.7172,
-//   lng: 85.324,
-// };
-// console.log("sujal and sujaldoc : " + HaversineAlgorithm(sujaldata, sujaldoc)+"----"+calculateDistance(sujaldata,sujaldoc));
-// console.log("ram and sujaldoc : " + HaversineAlgorithm(ram, sujaldoc)+"----"+calculateDistance(ram,sujaldoc));
-// console.log("atul and sujaldoc : " + HaversineAlgorithm(atuldata, sujaldoc)+"----"+calculateDistance(atuldata,sujaldoc));
-// console.log("sujal and ritadoc : " + HaversineAlgorithm(sujaldata, ritadoc)+"----"+calculateDistance(sujaldata,ritadoc));
-// console.log("atul and rita doc : " + HaversineAlgorithm(atuldata, ritadoc)+"----"+calculateDistance(atuldata,ritadoc));
-// console.log("atul and mike doc : " + HaversineAlgorithm(atuldata, mikedoc)+"----"+calculateDistance(atuldata,mikedoc));
-// console.log("ram and rita doc : " + HaversineAlgorithm(ram, ritadoc)+"----"+calculateDistance(ram,ritadoc));
-
 export const matchDoctors = async (req, res) => {
   try {
     const { specialty, patientEmail } = req.body;
@@ -297,19 +259,15 @@ export const bookAppointment = async (req, res) => {
       status: { $ne: "cancelled" },
     });
     if (userTotalAppointment.length >= 1) {
-      return res
-        .status(411)
-        .json({
-          message:
-            "You cannot book more than One appointment for the same doctor in the same day.",
-        });
+      return res.status(411).json({
+        message:
+          "You cannot book more than One appointment for the same doctor in the same day.",
+      });
     }
     if (appointmentCount == totalSlots) {
-      return res
-        .status(410)
-        .json({
-          message: "All slots are filled for this day. Select another day.",
-        });
+      return res.status(410).json({
+        message: "All slots are filled for this day. Select another day.",
+      });
     }
     const isSlotBooked = existingAppointments.some(
       (appt) => appt.startTime === newStart && appt.endTime === newEnd
@@ -391,13 +349,12 @@ export const rescheduleAppointment = async (req, res) => {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
-    // Find the appointment
     const appointment = await BookAppointment.findById(appointmentID);
     if (!appointment) {
       return res.status(404).json({ message: "Appointment not found" });
     }
 
-    // Find the doctor
+
     const doctor = await Doctor.findById(doctorID);
     if (!doctor) {
       return res.status(404).json({ message: "Doctor not found" });
@@ -411,7 +368,6 @@ export const rescheduleAppointment = async (req, res) => {
       return res.status(400).json({ message: "Invalid time slot" });
     }
 
-    // Get all appointments of that doctor on the new date (excluding current)
     const existingAppointments = await BookAppointment.find({
       doctorID,
       date: new Date(date),
@@ -419,7 +375,7 @@ export const rescheduleAppointment = async (req, res) => {
       status: { $ne: "cancelled" },
     });
 
-    // Check for conflict
+
     const isSlotBooked = existingAppointments.some(
       (appt) => appt.startTime === startTime && appt.endTime === endTime
     );
@@ -471,16 +427,15 @@ export const rescheduleAppointment = async (req, res) => {
 };
 
 export const getappointmentdata = async (req, res) => {
-  const { id } = req.query;
-
+ 
   try {
     let data;
-    if(req.query.id){
-       data = await BookAppointment.find({ patientId: id });
-    }else if(req.query.doctorID){
+    if (req.query.id) {
+      data = await BookAppointment.find({ patientId: req.query.id });
+    } else if (req.query.doctorID) {
       data = await BookAppointment.find({ doctorId: req.query.doctorID });
     }
-   
+
     if (data) {
       return res.status(200).json({
         message: "Appointment data fetched successfully.",
@@ -495,25 +450,20 @@ export const getappointmentdata = async (req, res) => {
   }
 };
 
-
 export const patientByDoctorEmail = async (req, res) => {
   const email = req.query.email;
 
   try {
- 
     const doctor = await Doctor.findOne({ email });
     if (!doctor) {
       return res.status(404).json({ error: "Doctor not found" });
     }
 
-   
     const appointments = await BookAppointment.find({ doctorId: doctor._id });
-
 
     const patientIds = [
       ...new Set(appointments.map((app) => app.patientId.toString())),
     ];
-
 
     const patients = await User.find({ _id: { $in: patientIds } });
     res.json({ data: patients });
@@ -524,7 +474,6 @@ export const patientByDoctorEmail = async (req, res) => {
 };
 
 export const getAppointmentStats = async (req, res) => {
- 
   try {
     const pendingCount = await BookAppointment.countDocuments({
       status: "pending",
@@ -581,8 +530,7 @@ export const chartdayData = async (req, res) => {
     today.setHours(0, 0, 0, 0);
 
     const next7Days = new Date(today);
-    next7Days.setDate(today.getDate() + 6); 
-
+    next7Days.setDate(today.getDate() + 6);
 
     const filteredAppointments = appointments.filter((appointment) => {
       const appointmentDate = new Date(appointment.date);
@@ -590,13 +538,11 @@ export const chartdayData = async (req, res) => {
       return appointmentDate >= today && appointmentDate <= next7Days;
     });
 
-  
     const grouped = filteredAppointments.reduce((acc, appointment) => {
       const date = new Date(appointment.date).toISOString().split("T")[0];
       acc[date] = (acc[date] || 0) + 1;
       return acc;
     }, {});
-
 
     const result = [];
     for (let i = 0; i < 7; i++) {
@@ -619,13 +565,11 @@ export const chartDoctorAppointments = async (req, res) => {
   try {
     const appointments = await BookAppointment.find();
 
-
     const grouped = appointments.reduce((acc, appointment) => {
       const doctor = appointment.doctorName || "Unknown";
       acc[doctor] = (acc[doctor] || 0) + 1;
       return acc;
     }, {});
-
 
     let formattedData = Object.entries(grouped).map(([doctorName, count]) => ({
       doctorName,
@@ -649,7 +593,7 @@ export const CancelAppointment = async (req, res) => {
     const appointment = await BookAppointment.findByIdAndUpdate(
       _id,
       { $set: { status: "cancelled" } },
-      { new: true } 
+      { new: true }
     );
 
     if (appointment) {
