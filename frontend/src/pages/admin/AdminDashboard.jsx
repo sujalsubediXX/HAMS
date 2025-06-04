@@ -112,7 +112,7 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="p-6 grid gap-8 grid-cols-1 w-[86vw] md:grid-cols-2 lg:grid-cols-3 bg-gray-50 min-h-screen overflow-y-auto">
+    <div className="p-6 grid gap-8 grid-cols-1 w-[86vw] md:grid-cols-2 lg:grid-cols-3 bg-gray-50 min-h-screen overflow-y-auto noscrollbar">
       <div className="bg-white rounded-2xl shadow p-4">
         <h2 className="text-xl font-semibold mb-4">Appointments This Week</h2>
         <ResponsiveContainer width="100%" height={200}>

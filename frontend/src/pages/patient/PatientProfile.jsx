@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 import ConfirmAlert from "../../Components/ConfirmAlert.jsx";
@@ -38,7 +39,7 @@ const PatientProfile = () => {
     doctorID: "",
     patientID: "",
   });
-
+const navigate=useNavigate();
   const today = new Date(Date.now() + 24 * 60 * 60 * 1000)
     .toISOString()
     .split("T")[0];
@@ -165,7 +166,10 @@ const PatientProfile = () => {
     console.log(formData);
     console.log(formData.firstName, "no");
     try {
-      const res = await axios.post("http://localhost:3000/api/user/updateprofile", formData);
+      const res = await axios.post(
+        "http://localhost:3000/api/user/updateprofile",
+        formData
+      );
       localStorage.setItem("Users", JSON.stringify(formData));
       setEditable(false);
       setShowAlert(true);
@@ -182,16 +186,21 @@ const PatientProfile = () => {
         const imagedata = new FormData();
         imagedata.append("image", profileimage);
         imagedata.append("email", formData.email);
-        const res = await axios.post("http://localhost:3000/api/user/insertimage", imagedata, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+        const res = await axios.post(
+          "http://localhost:3000/api/user/insertimage",
+          imagedata,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
         if (res.status === 201) {
           toast.success("Image inserted successfully.");
           setFormData((prev) => ({ ...prev, image: res.data.image }));
           setProfileimage("");
           fileInputRef.current.value = "";
+          navigate("/profile")
         } else {
           toast.error("Image not inserted.");
         }
@@ -205,7 +214,9 @@ const PatientProfile = () => {
 
   const handleCancelAppointment = async (id) => {
     try {
-      const res = await axios.put(`http://localhost:3000/api/appointment/cancelappointment/${id}`);
+      const res = await axios.put(
+        `http://localhost:3000/api/appointment/cancelappointment/${id}`
+      );
       if (res.status === 200) {
         toast.success("Appointment cancelled.");
         setConfirm(false);
@@ -251,7 +262,10 @@ const PatientProfile = () => {
         patientID: rescheduledata.patientID,
       };
 
-      const res = await axios.put("http://localhost:3000/api/appointment/reschedule", payload);
+      const res = await axios.put(
+        "http://localhost:3000/api/appointment/reschedule",
+        payload
+      );
       if (res.status === 200) {
         toast.success("Appointment rescheduled successfully.");
         setShowRescheduleModal(false);
@@ -292,10 +306,13 @@ const PatientProfile = () => {
 
       setLocation({ lat: latitude, lng: longitude });
       try {
-        const res = await axios.put("http://localhost:3000/api/user/changelocation", {
-          id: uservalue._id,
-          location: { lat: latitude, lng: longitude },
-        });
+        const res = await axios.put(
+          "http://localhost:3000/api/user/changelocation",
+          {
+            id: uservalue._id,
+            location: { lat: latitude, lng: longitude },
+          }
+        );
 
         if (res.status === 200) {
           toast.success("Your location updated.");
@@ -314,7 +331,9 @@ const PatientProfile = () => {
   const HandleavailableDays = async (id) => {
     console.log(id);
     try {
-      const res = await axios.get(`http://localhost:3000/api/doctor/doctor_id?id=${id}`);
+      const res = await axios.get(
+        `http://localhost:3000/api/doctor/doctor_id?id=${id}`
+      );
       if (res.status == 200) {
         setavailabledays(res.data.data[0].availableDays);
       } else {
@@ -334,17 +353,17 @@ const PatientProfile = () => {
     <>
       {!editable ? (
         <div
-          className={`min-h-screen bg-gray-100 pt-[16vh] w-full ${
+          className={`min-h-screen bg-gray-100 pt-[16vh]  w-full ${
             showRescheduleModal ? "hidden" : "block"
           }`}
         >
-          <div className="max-w-6xl mx-auto p-4 md:p-8">
+          <div className="w-[90%] mx-auto p-4 md:p-8">
             {showAlert && (
-              <div className="mb-4 bg-green-100 text-green-800 p-4 rounded shadow">
+              <div className=" bg-green-100 text-green-800 p-4 rounded shadow">
                 Profile updated successfully!
               </div>
             )}
-            <main className="flex flex-col md:flex-row gap-6 items-center">
+            <main className="flex flex-col md:flex-row gap-6 items-start">
               <div
                 className="bg-white shadow-xl rounded-xl p-6 flex flex-col items-center"
                 style={{ width: "312px", minHeight: "500px" }}
@@ -400,7 +419,7 @@ const PatientProfile = () => {
                 </div>
               </div>
 
-              <div style={{ width: "1100px", height: "500px" }}>
+              <div style={{ width: "1100px", height: "400px" }}>
                 <section className="bg-white rounded-xl shadow-xl p-6 mb-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <p>
@@ -442,21 +461,21 @@ const PatientProfile = () => {
                       </button>
                     ))}
                   </div>
-                  {
-                    activeTab=="Appointments" && (
-                      <div className="ml-4 space-x-2 ">
+                  {activeTab == "Appointments" && (
+                    <div className="ml-4 space-x-2 ">
                       <span>Show All</span>
-                      <input type="checkbox"  className="bg-blue-500 " onChange={() => setShowallAppointment((prev) => !prev)}/>
-                     
+                      <input
+                        type="checkbox"
+                        className="bg-blue-500 "
+                        onChange={() => setShowallAppointment((prev) => !prev)}
+                      />
                     </div>
-                    )
-                  }
-                
+                  )}
                 </div>
 
                 <div
-                  className="bg-white p-6 rounded-lg shadow-md h-[40vh]"
-                  style={{ height: "48vh", overflowY: "auto" }}
+                  className="bg-white p-6 rounded-lg shadow-md"
+                  style={{ height: "46vh", overflowY: "auto" }}
                 >
                   {activeTab === "Appointments" ? (
                     appointments.length > 0 ? (
@@ -487,25 +506,28 @@ const PatientProfile = () => {
                                   key={index}
                                   className="border-b hover:bg-gray-50"
                                 >
-                                  <td className="p-3 border">
+                                  <td className="px-3 py-2 border">
                                     {new Date(appt.date).toLocaleDateString()}
                                   </td>
-                                  <td className="p-3 border">
+                                  <td className="px-3 py-2 border">
                                     {appt.startTime}-{appt.endTime}
                                   </td>
-                                  <td className="p-3 border">
+                                  <td className="px-3 py-2 border">
                                     Dr. {appt.doctorName.toUpperCase()}
                                   </td>
-                                  <td
-                                    className={`p-3 border font-semibold ${
-                                      appt.status.toLowerCase() === "confirmed"
-                                        ? "bg-green-400"
-                                        : "bg-yellow-300"
-                                    }`}
-                                  >
-                                    {appt.status}
+                                  <td className={`border font-semibold `}>
+                                    <span
+                                      className={`px-3 py-2 rounded-2xl${
+                                        appt.status.toLowerCase() ===
+                                        "confirmed"
+                                          ? "bg-green-400"
+                                          : "bg-yellow-300 "
+                                      }`}
+                                    >
+                                      {appt.status}
+                                    </span>
                                   </td>
-                                  <td className="p-3 border space-x-2">
+                                  <td className="px-3 py-2 border space-x-2">
                                     {appt.status === "completed" && (
                                       <button
                                         onClick={() => setActiveTab("History")}

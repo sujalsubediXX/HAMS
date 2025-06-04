@@ -65,6 +65,7 @@ const Appointments = () => {
             setMedicaldata(res.data.data);
           }
         } catch (err) {
+         
           console.error("Error fetching medical data:", err);
         }
       }
@@ -91,7 +92,7 @@ const Appointments = () => {
         doctorName: selecteduser.doctorName,
         diagnosis,
         treatment,
-        _id: selecteduser._id,
+        appointmentId: selecteduser._id,
       };
 
       const res = await axios[isUpdating ? "put" : "post"](endpoint, payload);
@@ -105,6 +106,9 @@ const Appointments = () => {
         toast.error("Failed to submit medical data");
       }
     } catch (err) {
+      if (err.response.status === 404) {
+        alert(err.response.message);
+      }
       toast.error("Error submitting medical data");
     }
   };
@@ -195,6 +199,7 @@ const Appointments = () => {
                       <button
                         className="text-blue-600 hover:text-blue-800"
                         onClick={() => {
+                  
                           setSelecteduser({
                             doctorID: appt.doctorId,
                             patientID: appt.patientId,

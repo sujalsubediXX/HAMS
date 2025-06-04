@@ -78,7 +78,7 @@ export default function PatientSetting() {
     
   return (
     <>
-    <div className="max-w-4xl mx-auto py-[16vh] px-[14vw]">
+    <div className="max-w-4xl mx-auto py-[20vh] px-[14vw]">
       <h2 className="text-3xl font-bold mb-6">Settings</h2>
 
       <form
