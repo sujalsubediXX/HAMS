@@ -10,14 +10,11 @@ import {
 export const getDoctorTimeSlots = async (req, res) => {
   try {
     const { doctorId, date } = req.query;
-    console.log(doctorId, date);
 
-    // Validate input
     if (!doctorId) {
       return res.status(400).json({ message: "doctorId is required" });
     }
 
-    // Fetch doctor by ID
     const doctor = await Doctor.findById(doctorId).select(
       "name specialization timeSlots"
     );
@@ -25,28 +22,25 @@ export const getDoctorTimeSlots = async (req, res) => {
       return res.status(404).json({ message: "Doctor not found" });
     }
 
-    // Get doctor's time slots
-    const doctorTimeSlots = doctor.timeSlots || [];
+     const doctorTimeSlots = doctor.timeSlots || [];
     if (doctorTimeSlots.length === 0) {
       return res
         .status(404)
         .json({ message: "No time slots defined for this doctor" });
     }
 
-    // Map time slots to response format
     let timeSlots = doctorTimeSlots.map((slot) => ({
       start: slot.start,
       end: slot.end,
     }));
 
     if (date) {
-      // Validate date format
+
       const parsedDate = new Date(date);
       if (isNaN(parsedDate)) {
         return res.status(400).json({ message: "Invalid date format" });
       }
 
-      // Ensure date is not in the past
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       if (parsedDate < today) {
@@ -55,21 +49,18 @@ export const getDoctorTimeSlots = async (req, res) => {
           .json({ message: "Cannot fetch slots for past dates" });
       }
 
-      // Fetch booked appointments for the doctor on the given date
       const bookedAppointments = await BookAppointment.find({
         doctorId: doctor._id,
         date: parsedDate,
         status: { $ne: "cancelled" },
       }).select("startTime endTime");
 
-      // Filter out booked slots
       timeSlots = timeSlots.filter((slot) => {
         return !bookedAppointments.some(
           (appt) => appt.startTime === slot.start && appt.endTime === slot.end
         );
       });
 
-      // Apply interval scheduling to ensure no conflicts
       const allAppointments = bookedAppointments.map((appt) => ({
         id: appt._id.toString(),
         start: appt.startTime,
