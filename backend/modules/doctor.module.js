@@ -14,8 +14,8 @@ const doctorSchema = new mongoose.Schema({
   availableDays: { type: [String], required: true },
   timeSlots: [
     {
-      start: { type: String, required: true }, 
-      end: { type: String, required: true }, 
+      start: { type: String, required: true },
+      end: { type: String, required: true },
       _id: { type: mongoose.Schema.Types.ObjectId, auto: true },
     },
   ],
