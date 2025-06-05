@@ -11,7 +11,6 @@ const PatientProfile = () => {
   const [medicalhistory, setmedicalhistory] = useState([]);
   const [appointments, setAppointments] = useState([]);
   const [activeTab, setActiveTab] = useState("Appointments");
-  const [showAlert, setShowAlert] = useState(false);
   const [editable, setEditable] = useState(false);
   const fileInputRef = useRef();
   const [profileimage, setProfileimage] = useState("");
@@ -55,7 +54,7 @@ const PatientProfile = () => {
       const fetchUserData = async () => {
         try {
           const res = await axios.get(
-            `http://localhost:3000/api/user/userdata?email=${user.email}`
+            `/api/user/userdata?email=${user.email}`
           );
           if (res.data?.data) {
             setuservalue(res.data.data);
@@ -87,7 +86,7 @@ const PatientProfile = () => {
     const fetchAppointments = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:3000/api/appointment/getappointment?id=${uservalue._id}`
+          `/api/appointment/getappointment?id=${uservalue._id}`
         );
         setAppointments(res.data?.appointment || []);
       } catch (error) {
@@ -100,7 +99,7 @@ const PatientProfile = () => {
     const fetchHistory = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:3000/api/medicalhistory/getMedicalHistory?id=${uservalue._id}`
+          `/api/medicalhistory/getMedicalHistory?id=${uservalue._id}`
         );
         if (res.status == 200) {
           setmedicalhistory(res.data?.data || []);
@@ -123,7 +122,7 @@ const PatientProfile = () => {
     if (!docID || !rescheduledata.date) return;
     try {
       const res = await axios.get(
-        `http://localhost:3000/api/appointment/getDoctorTimeSlots?doctorId=${docID}&date=${rescheduledata.date}`
+        `/api/appointment/getDoctorTimeSlots?doctorId=${docID}&date=${rescheduledata.date}`
       );
       if (res.status === 200 && res.data.data && res.data.data.length > 0) {
         setTimeslot(res.data.data);
@@ -153,10 +152,10 @@ const PatientProfile = () => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData.firstName, "no");
+    
     try {
       const res = await axios.put(
-        "http://localhost:3000/api/user/updateprofile",
+        "/api/user/updateprofile",
        { updatedata:formData}
       );
       if(res.status==200){
@@ -168,8 +167,8 @@ const PatientProfile = () => {
         localStorage.setItem("Users", JSON.stringify(updateData));
       }
       setEditable(false);
-      setShowAlert(true);
-      setTimeout(() => setShowAlert(false), 3000);
+      toast.success("Profile edited");
+   
     } catch (error) {
       console.error("Failed to update profile:", error);
       toast.error("Failed to update profile. Please try again.");
@@ -183,7 +182,7 @@ const PatientProfile = () => {
         imagedata.append("image", profileimage);
         imagedata.append("email", formData.email);
         const res = await axios.post(
-          "http://localhost:3000/api/user/insertimage",
+          "/api/user/insertimage",
           imagedata,
           {
             headers: {
@@ -211,7 +210,7 @@ const PatientProfile = () => {
   const handleCancelAppointment = async (id) => {
     try {
       const res = await axios.put(
-        `http://localhost:3000/api/appointment/cancelappointment/${id}`
+        `/api/appointment/cancelappointment/${id}`
       );
       if (res.status === 200) {
         toast.success("Appointment cancelled.");
@@ -259,7 +258,7 @@ const PatientProfile = () => {
       };
 
       const res = await axios.put(
-        "http://localhost:3000/api/appointment/reschedule",
+        "/api/appointment/reschedule",
         payload
       );
       if (res.status === 200) {
@@ -302,7 +301,7 @@ const PatientProfile = () => {
 
       try {
         const res = await axios.put(
-          "http://localhost:3000/api/user/changelocation",
+          "/api/user/changelocation",
           {
             id: uservalue._id,
             location: { lat: latitude, lng: longitude },
@@ -327,7 +326,7 @@ const PatientProfile = () => {
     console.log(id);
     try {
       const res = await axios.get(
-        `http://localhost:3000/api/doctor/doctordata?id=${id}`
+        `/api/doctor/doctordata?id=${id}`
       );
       if (res.status == 200) {
         setavailabledays(res.data.data[0].availableDays);
@@ -353,11 +352,7 @@ const PatientProfile = () => {
           }`}
         >
           <div className="w-[90%] mx-auto p-4 md:p-8">
-            {showAlert && (
-              <div className=" bg-green-100 text-green-800 p-4 rounded shadow">
-                Profile updated successfully!
-              </div>
-            )}
+          
             <main className="flex flex-col md:flex-row gap-6 items-start">
               <div
                 className="bg-white shadow-xl rounded-xl p-6 flex flex-col items-center"

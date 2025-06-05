@@ -16,7 +16,7 @@ const Patients = () => {
       if (user?.email) {
         try {
           const res = await axios.get(
-            "http://localhost:3000/api/appointment/patients-by-doctor-email",
+            "/api/appointment/patients-by-doctor-email",
             {
               params: { email: user.email },
             }

@@ -12,7 +12,7 @@ const DoctorProfile = () => {
       if (user?.email) {
         try {
           const res = await axios.get(
-            `http://localhost:3000/api/doctor/doctordata?email=${user.email}`
+            `/api/doctor/doctordata?email=${user.email}`
           );
           if (res.status === 200) {
             setdoctordata(res.data.data);

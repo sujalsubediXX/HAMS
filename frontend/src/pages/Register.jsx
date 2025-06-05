@@ -58,7 +58,7 @@ const Register = () => {
 
     try {
       setLoading(true);
-      const response = await axios.post("http://localhost:3000/api/user/register", data);
+      const response = await axios.post("/api/user/register", data);
 
       if (response.status === 201) {
         toast.success("Registration successful!");

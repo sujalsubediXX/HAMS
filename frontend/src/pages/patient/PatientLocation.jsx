@@ -27,7 +27,7 @@ export const PatientLocation = () => {
     const fetchlocation = async () => {
       try {
         const getlocation = await axios.get(
-          `http://localhost:3000/api/user/getuserlocation?email=${user.email}`
+          `/api/user/getuserlocation?email=${user.email}`
         );
         if (getlocation.status == 200) {
           console.log(getlocation.data.data);
@@ -50,7 +50,7 @@ export const PatientLocation = () => {
       }
 
       try {
-        const res = await axios.get("http://localhost:3000/api/location/branch");
+        const res = await axios.get("/api/location/branch");
         if (res.status === 201) {
           if (Array.isArray(res.data.location)) {
             setlocations((prev) => [...prev, ...res.data.location]);

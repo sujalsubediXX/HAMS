@@ -32,7 +32,7 @@ const Settings = () => {
       toast.error("Password length should be more than 6 characters.");
     } else {
       try {
-        const res = await axios.put(`http://localhost:3000/api/doctor/updatepassword`, {
+        const res = await axios.put(`/api/doctor/updatepassword`, {
           email: user.email,
           pass,
           cpass,
@@ -56,7 +56,7 @@ const Settings = () => {
 
   const handledelete = async () => {
     try {
-      const res = await axios.delete("http://localhost:3000/api/doctor/deleteaccount", {
+      const res = await axios.delete("/api/doctor/deleteaccount", {
         data: { email: user.email },
       });
 

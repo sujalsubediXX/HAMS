@@ -37,7 +37,7 @@ const AddDoctor = () => {
   useEffect(() => {
     const fetchlocation = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/location/branch");
+        const res = await axios.get("/api/location/branch");
         if (res.status == 201) {
           setlocations(res.data.location);
         } else {
@@ -112,7 +112,7 @@ const AddDoctor = () => {
       };
       data.address = selectedBranch.name;
 
-      const response = await axios.post("http://localhost:3000/api/doctor/appointdoctor", data);
+      const response = await axios.post("/api/doctor/appointdoctor", data);
       console.log(data);
 
       if (response.status === 200) {

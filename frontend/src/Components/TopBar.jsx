@@ -41,7 +41,7 @@ const TopBar = () => {
       imagedata.append("email", user.email);
 
       try {
-        const res = await axios.post("http://localhost:3000/api/doctor/insertdoctorimage", imagedata, {
+        const res = await axios.post("/api/doctor/insertdoctorimage", imagedata, {
           headers: {
             "Content-Type": "multipart/form-data",
           },

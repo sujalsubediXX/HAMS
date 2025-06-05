@@ -9,7 +9,7 @@ const UploadImage = () => {
         e.preventDefault();
         if(file?.name){
             try {
-                const res=await axios.post("http://localhost:3000/api/doctor/image",formdata,{
+                const res=await axios.post("/api/doctor/image",formdata,{
                     headers:{
                         "Content-Type":"multipart/form-data"
                     }

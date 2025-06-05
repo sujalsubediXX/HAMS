@@ -11,7 +11,7 @@ const ManageDoctors = () => {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/doctor/doctordata");
+        const res = await axios.get("/api/doctor/doctordata");
         setDoctors(res.data.data);
       } catch (error) {
         console.error(`Fetching doctor error: ${error.message}`);

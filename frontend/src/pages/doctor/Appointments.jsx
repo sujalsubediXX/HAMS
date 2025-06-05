@@ -26,7 +26,7 @@ const Appointments = () => {
     const fetchDoctorData = async () => {
       if (user?.email) {
         try {
-          const res = await axios.get(`http://localhost:3000/api/doctor/doctordata?email=${user.email}`);
+          const res = await axios.get(`/api/doctor/doctordata?email=${user.email}`);
           if (res.status === 200) {
             setDoctordata(res.data.data);
           }
@@ -43,7 +43,7 @@ const Appointments = () => {
     const fetchAppointments = async () => {
       if (doctordata?._id) {
         try {
-          const res = await axios.get(`http://localhost:3000/api/appointment/getappointment?doctorID=${doctordata._id}`);
+          const res = await axios.get(`/api/appointment/getappointment?doctorID=${doctordata._id}`);
           if (res.status === 200) {
             setAppointmentdata(res.data.appointment);
           }
@@ -60,7 +60,7 @@ const Appointments = () => {
     const fetchMedicalData = async () => {
       if (doctordata?._id) {
         try {
-          const res = await axios.get(`http://localhost:3000/api/medicalhistory/getMedicalhistory?doctorID=${doctordata._id}`);
+          const res = await axios.get(`/api/medicalhistory/getMedicalhistory?doctorID=${doctordata._id}`);
           if (res.status === 200) {
             setMedicaldata(res.data.data);
           }
@@ -83,8 +83,8 @@ const Appointments = () => {
     try {
       const isUpdating = selecteduser.status === "completed";
       const endpoint = isUpdating
-        ? "http://localhost:3000/api/medicalhistory/updateMedicalData"
-        : "http://localhost:3000/api/medicalhistory/insertMedicalData";
+        ? "/api/medicalhistory/updateMedicalData"
+        : "/api/medicalhistory/insertMedicalData";
 
       const payload = {
         patientID: selecteduser.patientID,

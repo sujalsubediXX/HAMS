@@ -43,19 +43,19 @@ const Login = () => {
       let location = "";
 
       if (role === "User") {
-        res = await axios.post("http://localhost:3000/api/user/login", {
+        res = await axios.post("/api/user/login", {
           email,
           password,
         });
         location = "/";
       } else if (role === "Doctor") {
-        res = await axios.post("http://localhost:3000/api/doctor/login", {
+        res = await axios.post("/api/doctor/login", {
           email,
           password,
         });
         location = "/doctor/profile";
       } else {
-        res = await axios.post("http://localhost:3000/api/admin/login", {
+        res = await axios.post("/api/admin/login", {
           email,
           password,
         });
@@ -230,10 +230,11 @@ const Login = () => {
 
                 <button
                   type="submit"
-                  className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition duration-300 font-semibold cursor-pointer"
+                  className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition duration-300 font-semibold cursor-pointer flex items-center justify-center"
                 >
                   {loading ? (
-                    "logging..."
+                  <div class="w-7 h-7 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
+
                   ) : (
                    
                     "Login"

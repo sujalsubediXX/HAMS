@@ -28,7 +28,7 @@ const Header = () => {
       }
 
       try {
-        const res = await axios.get(`http://localhost:3000/api/user/userdata?email=${encodeURIComponent(user.email)}`);
+        const res = await axios.get(`/api/user/userdata?email=${encodeURIComponent(user.email)}`);
         if (res.status === 200) {
           setuserdata(res.data.data);
         } else {

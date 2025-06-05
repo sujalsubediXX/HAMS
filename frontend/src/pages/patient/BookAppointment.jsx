@@ -63,7 +63,7 @@ export default function BookAppointment() {
     };
     const fetchMatchDoctor = async () => {
       try {
-        const res = await axios.post("http://localhost:3000/api/appointment/matchDoctors", loaddata);
+        const res = await axios.post("/api/appointment/matchDoctors", loaddata);
         setFilteredDoctors(res.data.data);
       } catch (error) {
         console.log("No data");
@@ -148,7 +148,7 @@ export default function BookAppointment() {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/appointment/bookappointment",
+        "/api/appointment/bookappointment",
         appointment
       );
 
