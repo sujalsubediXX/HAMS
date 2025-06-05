@@ -14,14 +14,13 @@ const doctorSchema = new mongoose.Schema({
   availableDays: { type: [String], required: true },
   timeSlots: [
     {
-      start: { type: String, required: true }, // e.g., "10:00"
-      end: { type: String, required: true }, // e.g., "10:30"
+      start: { type: String, required: true }, 
+      end: { type: String, required: true }, 
       _id: { type: mongoose.Schema.Types.ObjectId, auto: true },
     },
   ],
   profileImage: { type: String, default: "" },
   address: { type: String },
-  bio: { type: String, default: "" },
   isActive: { type: Boolean, default: true },
   location: {
     lat: { type: Number, required: true },
