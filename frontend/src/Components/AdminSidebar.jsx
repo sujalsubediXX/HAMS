@@ -21,7 +21,7 @@ const AdminSidebar = () => {
         to="/admin/admindashboard"
         className="w-full border-b border-gray-700 cursor-pointer  "
       >
-        <img src={admindashboard2} alt="" className="w-38 mx-auto my-3" />
+        <img src={admindashboard2}  className="w-38 mx-auto my-3" />
       </Link>
 
       <nav className="flex-1  space-y-2 p-4">

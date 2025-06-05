@@ -10,12 +10,21 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:3000',
+        target: 'http://localhost:3000', // ✅ your backend port
         changeOrigin: true,
         secure: false,
+        configure: (proxy, options) => {
+          proxy.on('error', (err, req, res) => {
+            console.error(`[proxy error] ${req.url}: ${err.message}`);
+            if (!res.headersSent) {
+              res.writeHead(502, { 'Content-Type': 'application/json' });
+            }
+            res.end(JSON.stringify({ error: 'Backend service is unavailable' }));
+          });
+        },
       },
     },
-  }
+  },
 })
 
 

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const ManageDoctors = () => {
   const [doctors, setDoctors] = useState([]);
@@ -13,7 +14,9 @@ const ManageDoctors = () => {
       try {
         const res = await axios.get("/api/doctor/doctordata");
         setDoctors(res.data.data);
+
       } catch (error) {
+        toast.error("Backend server not started or crashed.")
         console.error(`Fetching doctor error: ${error.message}`);
       }
     };
@@ -28,7 +31,8 @@ const ManageDoctors = () => {
   const filteredUsers = doctors.filter(
     (doctor) =>
       doctor.name.toLowerCase().includes(searchdoctor) ||
-      doctor.email.toLowerCase().includes(searchdoctor)
+      doctor.email.toLowerCase().includes(searchdoctor) ||
+      doctor.gender.toLowerCase().includes(searchdoctor)
   );
   const itemperpage = 8;
   const totalPages = Math.ceil(filteredUsers.length / itemperpage);
