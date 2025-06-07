@@ -5,7 +5,7 @@ import { useAuth } from "../../Utils/AuthProvider";
 import toast from "react-hot-toast";
 
 const Appointments = () => {
-  const { user } = useAuth();
+  const { user ,userData} = useAuth();
   const [doctordata, setDoctordata] = useState({});
   const [appointmentdata, setAppointmentdata] = useState([]);
   const [medicaldata, setMedicaldata] = useState([]);
@@ -18,27 +18,15 @@ const Appointments = () => {
   const [filterStatus, setFilterStatus] = useState("all");
   const [filterDate, setFilterDate] = useState("");
   const [currentpage, setCurrentPage] = useState(1);
-
   const itemsPerPage = 8;
-
-  // Fetch doctor data
   useEffect(() => {
-    const fetchDoctorData = async () => {
-      if (user?.email) {
-        try {
-          const res = await axios.get(`/api/doctor/doctordata?email=${user.email}`);
-          if (res.status === 200) {
-            setDoctordata(res.data.data);
-          }
-        } catch (err) {
-          console.error("Error fetching doctor data:", err);
-        }
-      }
-    };
-    fetchDoctorData();
-  }, [user]);
+    if (user?.role) {
+      setDoctordata(userData)
+    } else {
+      setDoctordata({}); 
+    }
+  }, [user,userData]);
 
-  // Fetch appointments
   useEffect(() => {
     const fetchAppointments = async () => {
       if (doctordata?._id) {

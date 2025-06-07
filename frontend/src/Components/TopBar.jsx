@@ -1,36 +1,17 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { FaUsers, FaClipboardList, FaCog, FaInfoCircle } from "react-icons/fa";
 import { useAuth } from "../Utils/AuthProvider";
 import axios from "axios";
 import doctorimg from "/doctoriamge.png";
-import { useLocation } from "react-router-dom";
 import { toast } from "react-hot-toast"; 
 
 const TopBar = () => {
-  const { user } = useAuth();
-  const [doctordata, setDoctordata] = useState({});
-  const location = useLocation();
+  const { userData} = useAuth();
 
   const [previewImg, setPreviewImg] = useState(null);
   const fileInputRef = useRef(null);
-
-  const fetchDoctorData = async () => {
-    if (user?.email) {
-      try {
-        const res = await axios.get(`http://localhost:3000/api/doctor/doctordata?email=${user.email}`);
-        if (res.status === 200) {
-          setDoctordata(res.data.data);
-        }
-      } catch (err) {
-        console.error("Error fetching doctor data:", err);
-      }
-    }
-  };
-
-  useEffect(() => {
-    fetchDoctorData();
-  }, [user]);
-
+  
+  
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -38,7 +19,7 @@ const TopBar = () => {
 
       const imagedata = new FormData();
       imagedata.append("image", file);
-      imagedata.append("email", user.email);
+      imagedata.append("email", userData.email);
 
       try {
         const res = await axios.post("/api/doctor/insertdoctorimage", imagedata, {
@@ -49,7 +30,7 @@ const TopBar = () => {
 
         if (res.status === 201) {
           toast.success("Image inserted successfully.");
-          fetchDoctorData();
+     
         } else {
           toast.error("Image not inserted.");
         }
@@ -101,9 +82,9 @@ const TopBar = () => {
         className="relative flex justify-center items-center rounded-2xl px-3 py-1 space-x-3 border-white border-2 cursor-pointer group"
         onClick={handleImageClick}
       >
-        <label className="select-none">Dr {doctordata.name || "Loading..."}</label>
+        <label className="select-none">Dr {userData.name || "Loading..."}</label>
         <img
-          src={previewImg || doctordata.profileImage || doctorimg}
+          src={previewImg || userData.profileImage || doctorimg}
           alt="Doctor"
           className="w-12 h-12 rounded-full object-cover"
         />

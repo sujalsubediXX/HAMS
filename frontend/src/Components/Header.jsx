@@ -16,31 +16,17 @@ const Header = () => {
   const [userdata, setuserdata] = useState({});
   const lastScroll = useRef(0);
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const { user, logout,userData } = useAuth();
 
   const userRole = user?.role;
-
   useEffect(() => {
-    const fetchUserData = async () => {
-      if (!user || !user.email) {
-        console.log("User or user.email not available yet");
-        return;
-      }
-
-      try {
-        const res = await axios.get(`/api/user/userdata?email=${encodeURIComponent(user.email)}`);
-        if (res.status === 200) {
-          setuserdata(res.data.data);
-        } else {
-          console.log("No data found or error status", res.status);
-        }
-      } catch (error) {
-        console.error("Error fetching the data from header:", error);
-      }
-    };
-
-    fetchUserData();
-  }, [user]);
+    if (user?.role) {
+      setuserdata(userData)
+    } else {
+      setuserdata({}); 
+    }
+  }, [user,userData]);
+ 
 
   const outsidediv = useRef(null);
   const profileDivRef = useRef(null);

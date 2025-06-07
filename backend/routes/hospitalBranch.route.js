@@ -1,7 +1,8 @@
 import express from "express";
-import { addHospitalBranch } from "../controller/hospitalBranch.controller.js";
+import { addHospitalBranch,hospitalBranchlocation} from "../controller/hospitalBranch.controller.js";
 const router = express.Router();
 
 router.post("/addHospitalbranch", addHospitalBranch);
+router.get("/location", hospitalBranchlocation);
 
 export default router;

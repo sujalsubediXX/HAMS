@@ -28,21 +28,7 @@ dbconnect(dblink).then(() => {
   app.use("/api/appointment", bookAppointment);
   app.use("/api/medicalhistory", medicalHistory);
   app.use("/api/hospital", hospitalBranch);
-  app.get("/api/location/branch", async (req, res) => {
-    try {
-      const data = await Branch.find();
-      if (data) {
-        return res.status(201).json({ location: data });
-      } else {
-        return res
-          .status(404)
-          .json({ message: "branch location data not found" });
-      }
-    } catch (error) {
-      return res.status(404).json({ message: "location data error" });
-    }
-  });
-
+ 
   app.listen(port, () => {
     console.log(`APP listening on port : ${port}`);
   });

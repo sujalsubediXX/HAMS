@@ -23,7 +23,7 @@ export const BranchLocation = () => {
   useEffect(()=>{
     const fetchlocation=async()=>{
         try {
-            const res=await axios.get("/api/location/branch");
+            const res=await axios.get("/api/hospital/location");
             if(res.status==201){
            setlocations(res.data.location)
             }else{

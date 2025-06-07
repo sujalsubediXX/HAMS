@@ -1,12 +1,13 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { FaUserMd, FaCheckCircle, FaArrowAltCircleLeft } from "react-icons/fa";
-
+import { useAuth } from "../../Utils/AuthProvider.jsx";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import doctorSpecialties from "../../Utils/Symptoms.js";
 
 export default function BookAppointment() {
+  const { user, userData } = useAuth();
   const navigate = useNavigate();
   const [patient, setPatient] = useState({});
   const [step, setStep] = useState(1);
@@ -35,19 +36,16 @@ export default function BookAppointment() {
     .split("T")[0];
 
 
-  // Fetch patient info from localStorage after login
   useEffect(() => {
-    const patientinfo = localStorage.getItem("Users");
-    if (patientinfo) {
-      const parsed = JSON.parse(patientinfo);
-      setPatient(parsed);
+    if (user?.role) {
+      setPatient(userData);
       setFormData((prev) => ({
         ...prev,
-        name: parsed.name || "",
-        email: parsed.email || "",
+        name: userData.name || "",
+        email: userData.email || "",
       }));
     }
-  }, []);
+  }, [user, userData]);
 
   // Handle input changes for form fields
   const handleChange = (e) => {

@@ -103,13 +103,11 @@ export const getDoctorInfo = async (req, res) => {
     } else {
       doctorinfo = await Doctor.find();
     }
-    if (doctorinfo) {
+  
       return res
         .status(200)
         .json({ message: "Doctor data accessed.", data: doctorinfo });
-    } else {
-      return res.status(400).json({ message: "Failed fetching doctor data." });
-    }
+    
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "doctor data fetching error" });

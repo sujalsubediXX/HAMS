@@ -233,7 +233,7 @@ const Login = () => {
                   className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition duration-300 font-semibold cursor-pointer flex items-center justify-center"
                 >
                   {loading ? (
-                  <div class="w-7 h-7 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
+                  <div className="w-7 h-7 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
 
                   ) : (
                    

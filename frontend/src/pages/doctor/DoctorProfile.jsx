@@ -1,30 +1,9 @@
 import { FaEnvelope, FaPhone, FaMapMarkerAlt } from "react-icons/fa";
-
 import { useAuth } from "../../Utils/AuthProvider";
-import { useState, useEffect } from "react";
-import axios from "axios";
 
 const DoctorProfile = () => {
-  const { user } = useAuth();
-  const [doctordata, setdoctordata] = useState({});
-  useEffect(() => {
-    const fetchdata = async () => {
-      if (user?.email) {
-        try {
-          const res = await axios.get(
-            `/api/doctor/doctordata?email=${user.email}`
-          );
-          if (res.status === 200) {
-            setdoctordata(res.data.data);
-          }
-        } catch (err) {
-          console.error("Error fetching doctor data:", err);
-        }
-      }
-    };
-
-    fetchdata();
-  }, [user]);
+  const { userData } = useAuth();
+  
   return (
     <div className=" bg-gray-100 flex flex-col w-full h-[88vh] ">
       <div className=" h-full flex items-center justify-center  ">
@@ -37,24 +16,24 @@ const DoctorProfile = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-4 text-[16px] md:text-xl">
                 <div>
                   <p className="text-gray-500">Experience</p>
-                  <p className="text-gray-800">{doctordata.experience} years</p>
+                  <p className="text-gray-800">{userData.experience} years</p>
                 </div>
                 <div>
                   <p className="text-gray-500">Education</p>
                   <p className="text-gray-800 font-medium">
-                    {doctordata.qualification}
+                    {userData.qualification}
                   </p>
                 </div>
                 <div>
                   <p className="text-gray-500">Speciality</p>
                   <p className="text-gray-800 font-medium">
-                    {doctordata.specialization}
+                    {userData.specialization}
                   </p>
                 </div>
                 <div>
                   <p className="text-gray-500">License</p>
                   <p className="text-gray-800 font-medium">
-                    {doctordata.license}
+                    {userData.license}
                   </p>
                 </div>
               </div>
@@ -67,15 +46,15 @@ const DoctorProfile = () => {
               <div className="space-y-4">
                 <div className="flex items-center space-x-3">
                   <FaEnvelope className="text-blue-600" />
-                  <p className="text-gray-800">{doctordata.email}</p>
+                  <p className="text-gray-800">{userData.email}</p>
                 </div>
                 <div className="flex items-center space-x-3">
                   <FaPhone className="text-blue-600" />
-                  <p className="text-gray-800">{doctordata.phone}</p>
+                  <p className="text-gray-800">{userData.phone}</p>
                 </div>
                 <div className="flex items-center space-x-3">
                   <FaMapMarkerAlt className="text-blue-600" />
-                  <p className="text-gray-800">{doctordata.address}</p>
+                  <p className="text-gray-800">{userData.address}</p>
                 </div>
               </div>
             </section>

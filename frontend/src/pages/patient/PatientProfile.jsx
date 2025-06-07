@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 import ConfirmAlert from "../../Components/ConfirmAlert.jsx";
+import { useAuth } from "../../Utils/AuthProvider";
 const PatientProfile = () => {
   const [uservalue, setuservalue] = useState(null);
   const [showRescheduleModal, setShowRescheduleModal] = useState(false);
@@ -21,7 +22,7 @@ const PatientProfile = () => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
-    oldemail:"",
+    oldemail: "",
     email: "",
     phone: "",
     gender: "",
@@ -29,6 +30,7 @@ const PatientProfile = () => {
     address: "",
     image: "",
   });
+  const { user, userData } = useAuth();
 
   const [rescheduledata, setrescheduledata] = useState({
     date: "",
@@ -46,39 +48,21 @@ const PatientProfile = () => {
     .split("T")[0];
 
   useEffect(() => {
-    const localdata = localStorage.getItem("Users");
-    if (localdata) {
-      const user = JSON.parse(localdata);
-     
-
-      const fetchUserData = async () => {
-        try {
-          const res = await axios.get(
-            `/api/user/userdata?email=${user.email}`
-          );
-          if (res.data?.data) {
-            setuservalue(res.data.data);
-            setFormData({
-              firstName: res.data.data.firstName || "",
-              lastName: res.data.data.lastName || "",
-              oldemail: res.data.data.email || "",
-              email: res.data.data.email || "",
-              phone: res.data.data.phone || "",
-              gender: res.data.data.gender || "",
-              age: res.data.data.age || "",
-              address: res.data.data.address || "",
-              image: res.data.data.image || "",
-            });
-          }
-        } catch (error) {
-          console.error("Failed to fetch user data:", error);
-          toast.error("Failed to fetch user data.");
-        }
-      };
-
-      fetchUserData();
+    if(user?.role){
+      setuservalue(userData)
+        setFormData({
+        firstName: userData.firstName || "",
+        lastName: userData.lastName || "",
+        oldemail: userData.email || "",
+        email: userData.email || "",
+        phone: userData.phone || "",
+        gender: userData.gender || "",
+        age: userData.age || "",
+        address: userData.address || "",
+        image: userData.image || "",
+      });
     }
-  }, []);
+  }, [user,userData]);
 
   useEffect(() => {
     if (!uservalue?._id) return;
@@ -145,30 +129,27 @@ const PatientProfile = () => {
     }
   }, [showRescheduleModal, docID, rescheduledata.date]);
 
-  const  handleInputChange = (e) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    
-    try {
-      const res = await axios.put(
-        "/api/user/updateprofile",
-       { updatedata:formData}
-      );
-      if(res.status==200){
-        const updateData={
-          email:formData.email,
-           role:"User"
 
-        }
+    try {
+      const res = await axios.put("/api/user/updateprofile", {
+        updatedata: formData,
+      });
+      if (res.status == 200) {
+        const updateData = {
+          email: formData.email,
+          role: "User",
+        };
         localStorage.setItem("Users", JSON.stringify(updateData));
       }
       setEditable(false);
       toast.success("Profile edited");
-   
     } catch (error) {
       console.error("Failed to update profile:", error);
       toast.error("Failed to update profile. Please try again.");
@@ -181,15 +162,11 @@ const PatientProfile = () => {
         const imagedata = new FormData();
         imagedata.append("image", profileimage);
         imagedata.append("email", formData.email);
-        const res = await axios.post(
-          "/api/user/insertimage",
-          imagedata,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
+        const res = await axios.post("/api/user/insertimage", imagedata, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
         if (res.status === 201) {
           toast.success("Image inserted successfully.");
           setFormData((prev) => ({ ...prev, image: res.data.image }));
@@ -209,9 +186,7 @@ const PatientProfile = () => {
 
   const handleCancelAppointment = async (id) => {
     try {
-      const res = await axios.put(
-        `/api/appointment/cancelappointment/${id}`
-      );
+      const res = await axios.put(`/api/appointment/cancelappointment/${id}`);
       if (res.status === 200) {
         toast.success("Appointment cancelled.");
         setConfirm(false);
@@ -230,7 +205,7 @@ const PatientProfile = () => {
     setrescheduledata((prev) => ({
       ...prev,
       [name]: value,
-      ...(name === "date" ? { time: "" } : {}), // Reset time when date changes
+      ...(name === "date" ? { time: "" } : {}), 
     }));
   };
 
@@ -257,10 +232,7 @@ const PatientProfile = () => {
         patientID: rescheduledata.patientID,
       };
 
-      const res = await axios.put(
-        "/api/appointment/reschedule",
-        payload
-      );
+      const res = await axios.put("/api/appointment/reschedule", payload);
       if (res.status === 200) {
         toast.success("Appointment rescheduled successfully.");
         setShowRescheduleModal(false);
@@ -288,7 +260,7 @@ const PatientProfile = () => {
       return;
     }
     navigator.permissions.query({ name: "geolocation" }).then((result) => {
-      console.log("Permission status:", result.state); // 'granted', 'prompt', or 'denied'
+      console.log("Permission status:", result.state); 
     });
     if ("geolocation" in navigator) {
       const getPosition = () =>
@@ -300,13 +272,10 @@ const PatientProfile = () => {
       const { latitude, longitude } = pos.coords;
 
       try {
-        const res = await axios.put(
-          "/api/user/changelocation",
-          {
-            id: uservalue._id,
-            location: { lat: latitude, lng: longitude },
-          }
-        );
+        const res = await axios.put("/api/user/changelocation", {
+          id: uservalue._id,
+          location: { lat: latitude, lng: longitude },
+        });
 
         if (res.status === 200) {
           toast.success("Your location updated.");
@@ -325,9 +294,7 @@ const PatientProfile = () => {
   const HandleavailableDays = async (id) => {
     console.log(id);
     try {
-      const res = await axios.get(
-        `/api/doctor/doctordata?id=${id}`
-      );
+      const res = await axios.get(`/api/doctor/doctordata?id=${id}`);
       if (res.status == 200) {
         setavailabledays(res.data.data[0].availableDays);
       } else {
@@ -352,7 +319,6 @@ const PatientProfile = () => {
           }`}
         >
           <div className="w-[90%] mx-auto p-4 md:p-8">
-          
             <main className="flex flex-col md:flex-row gap-6 items-start">
               <div
                 className="bg-white shadow-xl rounded-xl p-6 flex flex-col items-center"

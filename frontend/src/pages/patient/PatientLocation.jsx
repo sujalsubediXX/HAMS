@@ -50,7 +50,7 @@ export const PatientLocation = () => {
       }
 
       try {
-        const res = await axios.get("/api/location/branch");
+        const res = await axios.get("/api/hospital/location");
         if (res.status === 201) {
           if (Array.isArray(res.data.location)) {
             setlocations((prev) => [...prev, ...res.data.location]);

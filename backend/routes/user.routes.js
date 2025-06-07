@@ -1,7 +1,7 @@
 import express from "express";
 import { loginuser, registeruser ,userdata,UserImage,UpdatePassword,deleteAccount,getGenderStats,getAgeStats,ChangeLocation,getUserLocation,updateProfile} from "../controller/user.controller.js";
 const router = express.Router();
-import { Upload } from "../upload.js";
+import { Upload } from "../utils/upload.js";
 router.post("/login", loginuser);
 router.post("/register", registeruser);
 router.get("/userdata",userdata);

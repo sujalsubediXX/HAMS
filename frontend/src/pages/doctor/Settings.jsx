@@ -1,15 +1,15 @@
 import { FaEyeSlash, FaEye } from "react-icons/fa";
-
 import { useAuth } from "../../Utils/AuthProvider.jsx";
 import toast from "react-hot-toast";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ConfirmAlert from "../../Components/ConfirmAlert.jsx";
+
 const Settings = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
- 
+
   const [pass, setpass] = useState("");
   const [cpass, setcpass] = useState("");
   const [cpass2, setcpass2] = useState("");
@@ -17,7 +17,6 @@ const Settings = () => {
   const [showPassword, setShowpassword] = useState(false);
   const [shownewPassword, setShownewpassword] = useState(false);
   const [showconfirmPassword, setShowconfirmpassword] = useState(false);
-
 
   const [showConformation, setshowConformation] = useState(false);
 
@@ -52,8 +51,6 @@ const Settings = () => {
     }
   };
 
- 
-
   const handledelete = async () => {
     try {
       const res = await axios.delete("/api/doctor/deleteaccount", {
@@ -64,7 +61,6 @@ const Settings = () => {
         toast.success("Your account was deleted Successfully.");
         logout();
         navigate("/");
-    
       } else {
         toast.error("Account not deleted.");
       }
