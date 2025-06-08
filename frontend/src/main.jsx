@@ -8,12 +8,12 @@ import { Toaster } from "react-hot-toast";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 // UserPanel
-import Userlayout from "./Userlayout.jsx";
+import Userlayout from "./layouts/Userlayout.jsx";
 import Home from "./pages/patient/Home.jsx";
 import PatientSetting from "./pages/patient/PatientSetting.jsx";
 import PatientLocation from "./pages/patient/PatientLocation.jsx";
 // AdminPanel
-import Adminlayout from "./Adminlayout.jsx";
+import Adminlayout from "./layouts/Adminlayout.jsx";
 import AddDoctor from "./pages/admin/AddDocotor.jsx";
 import ManageDoctors from "./pages/admin/ManageDoctors.jsx";
 import ManagePatients from "./pages/admin/ManagePatients.jsx";
@@ -25,7 +25,7 @@ import { AuthProvider } from "./Utils/AuthProvider.jsx";
 import ProtectedRoutes from "./Utils/ProtectedRoutes.jsx";
 import BookAppointment from "./pages/patient/BookAppointment.jsx";
 import PatientProfile from "./pages/patient/PatientProfile.jsx";
-import Doctorlayout from "./Doctorlayout.jsx";
+import Doctorlayout from "./layouts/Doctorlayout.jsx";
 import DoctorProfile from "./pages/doctor/DoctorProfile.jsx";
 import Appointments from "./pages/doctor/Appointments.jsx";
 import Patients from "./pages/doctor/Patients.jsx";

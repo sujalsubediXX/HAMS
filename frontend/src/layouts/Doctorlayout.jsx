@@ -1,7 +1,7 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
-import DoctorSidebar from './Components/DoctorSidebar'
-import TopBar from './Components/TopBar'
+import DoctorSidebar from '../Components/DoctorSidebar'
+import TopBar from '../Components/TopBar'
 const Doctorlayout = () => {
   return (
     <div className='w-[100vw] flex overflow-x-hidden'>
