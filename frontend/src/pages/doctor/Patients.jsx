@@ -78,36 +78,36 @@ const Patients = () => {
         {/* Patients Table */}
         <div className="p-6">
           <div className="overflow-x-auto">
-            <table className="w-full text-center">
-              <thead>
-                <tr className="bg-gray-100 text-gray-700">
-                  <th>SN.</th>
-                  <th className="p-3">Name</th>
-                  <th className="p-3">Email</th>
-                  <th className="p-3">Age</th>
-                  <th className="p-3">Phone</th>
-                  <th className="p-3">Gender</th>
-                  <th className="p-3">IsActive</th>
+            <table className="w-full border-collapse bg-white shadow-md rounded-lg">
+              <thead className="bg-blue-100 text-gray-600">
+                <tr >
+                  <th className="p-3 border">SN.</th>
+                  <th className="p-3 border">Name</th>
+                  <th className="p-3 border">Email</th>
+                  <th className="p-3 border">Age</th>
+                  <th className="p-3 border">Phone</th>
+                  <th className="p-3 border">Gender</th>
+                  <th className="p-3 border">IsActive</th>
                 </tr>
               </thead>
               <tbody>
                 {currentPatients.map((patient, index) => (
                   <tr
                     key={patient.id || index}
-                    className="border-b hover:bg-gray-50"
+                   className="text-center text-gray-700"
                   >
-                    <td className="p-3">{indexOfFirst + index + 1}</td>
-                    <td className="p-3">
+                    <td className="p-3 border">{indexOfFirst + index + 1}</td>
+                    <td className="p-3 border">
                       {patient.firstName} {patient.lastName}
                     </td>
-                    <td className="p-3">{patient.email}</td>
-                    <td className="p-3">{patient.age}</td>
-                    <td className="p-3">{patient.phone}</td>
-                    <td className="p-3">
+                    <td className="p-3 border">{patient.email}</td>
+                    <td className="p-3 border">{patient.age}</td>
+                    <td className="p-3 border">{patient.phone}</td>
+                    <td className="p-3 border">
                       {patient.gender.charAt(0).toUpperCase() +
                         patient.gender.slice(1)}
                     </td>
-                    <td className="p-3 text-white font-medium ">
+                    <td className="p-3 border ">
                       <span
                         className={`py-1 px-3 rounded-lg ${
                           patient.isActive

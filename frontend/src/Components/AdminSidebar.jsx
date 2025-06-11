@@ -1,4 +1,4 @@
-import { FaUserMd, FaCalendarAlt, FaCog, FaSignOutAlt } from "react-icons/fa";
+import { FaUserMd, FaCalendarAlt, FaCog, FaSignOutAlt,FaStethoscope, FaRegUser  } from "react-icons/fa"; 
 import { MdOutlineDoorBack } from "react-icons/md";
 import { IoLocation } from "react-icons/io5";
 import admindashboard2 from "/admindashboard2.jpg";
@@ -55,8 +55,19 @@ const AdminSidebar = () => {
             }`
           }
         >
-          <FaUserMd />
+         <FaRegUser />
           <p className="hidden sm:block">Patients</p>
+        </NavLink>
+        <NavLink
+          to="managedspecialty"
+          className={({ isActive }) =>
+            `flex items-center space-x-3 p-2  rounded-md hover:bg-gray-200 justify-center sm:justify-start ${
+              isActive ? "bg-gray-200" : ""
+            }`
+          }
+        >
+          <FaStethoscope />
+          <p className="hidden sm:block">Specialty</p>
         </NavLink>
         <NavLink
           to="totalappointment"

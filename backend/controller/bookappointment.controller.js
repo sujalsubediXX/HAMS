@@ -211,7 +211,7 @@ export const matchDoctors = async (req, res) => {
 
 export const bookAppointment = async (req, res) => {
   try {
-    const { email, date, time, specialty, doctorname, doctoremail } = req.body;
+    const { email,name, date, time, specialty, doctorname, doctoremail } = req.body;
 
     // Parse time slot "10:00 - 10:30"
     const [newStart, newEnd] = time.split(" - ").map((t) => t.trim());
@@ -301,6 +301,7 @@ export const bookAppointment = async (req, res) => {
     // Create and save new appointment
     const newAppointment = new BookAppointment({
       doctorName: doctorname,
+      patientName: name,
       patientId: patient._id,
       doctorId: doctor._id,
       date: new Date(date),

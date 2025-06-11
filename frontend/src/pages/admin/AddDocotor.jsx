@@ -3,23 +3,23 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import toast from "react-hot-toast";
-
-const specializations = [
-  "Cardiologist",
-  "Pulmonologist",
-  "Dermatologist",
-  "General Physician",
-  "Neurologist",
-  "Pediatrician",
-  "Psychiatrist",
-  "ENT Specialist",
-  "Radiologist",
-  "Gastroenterologist",
-  "Orthopedic",
-  "Ophthalmologist",
-  "Gynecologist",
-  "Endocrinologist",
-];
+import { useAuth } from "../../Utils/AuthProvider.jsx";
+// const specializations = [
+//   "Cardiologist",
+//   "Pulmonologist",
+//   "Dermatologist",
+//   "General Physician",
+//   "Neurologist",
+//   "Pediatrician",
+//   "Psychiatrist",
+//   "ENT Specialist",
+//   "Radiologist",
+//   "Gastroenterologist",
+//   "Orthopedic",
+//   "Ophthalmologist",
+//   "Gynecologist",
+//   "Endocrinologist",
+// ];
 
 const daysOfWeek = [
   "Sunday",
@@ -32,12 +32,14 @@ const daysOfWeek = [
 ];
 
 const AddDoctor = () => {
+  const {specialties} = useAuth();
+  const specializations = specialties.map((spec) => spec.name);
   const navigate = useNavigate();
   const [locations, setlocations] = useState([]);
   useEffect(() => {
     const fetchlocation = async () => {
       try {
-        const res = await axios.get("/api/location/branch");
+        const res = await axios.get("/api/hospital/location");
         if (res.status == 201) {
           setlocations(res.data.location);
         } else {

@@ -27,13 +27,7 @@ const Login = () => {
         navigate("/admin/admindashboard");
       }
     }, 3000);
-    if (user && user.role === "Doctor") {
-      navigate("/doctor/profile");
-    } else if (user && user.role === "User") {
-      navigate("/");
-    } else if (user && user.role === "Admin") {
-      navigate("/admin/admindashboard");
-    }
+ 
   }, [user]);
 
   const setLogin = async () => {
@@ -62,11 +56,11 @@ const Login = () => {
         location = "/admin/admindashboard";
       }
 
-      const userdata = { email, role };
+      const userdata = { email, role ,name: res.data.username};
 
-      login(userdata);
-      toast.success("Login Success");
       setTimeout(() => {
+        toast.success("Login Success");
+        login(userdata);
         navigate(location);
       }, 2000);
     } catch (error) {

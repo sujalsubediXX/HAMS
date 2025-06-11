@@ -72,8 +72,8 @@ export const loginuser = async (req, res) => {
       if (!isMatch) {
         return res.status(401).json({ message: "Invalid credentials" });
       }
-
-      return res.status(200).json({ message: "Login Success" });
+   const username = user.firstName + " " + user.lastName;
+      return res.status(200).json({ message: "Login Success",username });
     } else {
       return res.status(300).json({ message: "Not user" });
     }

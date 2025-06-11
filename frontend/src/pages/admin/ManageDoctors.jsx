@@ -3,7 +3,7 @@ import { FaSearch } from "react-icons/fa";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
-
+import Fuse from "fuse.js";
 const ManageDoctors = () => {
   const [doctors, setDoctors] = useState([]);
   const [searchdoctor, setSearchdoctors] = useState("");
@@ -27,13 +27,12 @@ const ManageDoctors = () => {
     setSearchdoctors(e.target.value.toLowerCase());
   };
 
-  // Filter users based on the search query
-  const filteredUsers = doctors.filter(
-    (doctor) =>
-      doctor.name.toLowerCase().includes(searchdoctor) ||
-      doctor.email.toLowerCase().includes(searchdoctor) ||
-      doctor.gender.toLowerCase().includes(searchdoctor)
-  );
+  const fuse=new Fuse(doctors,{
+    keys:["name","email"],
+    threshold:0.3,
+    ignoreLocation:true
+  })
+  const filteredUsers = searchdoctor?fuse.search(searchdoctor).map(data=>data.item):doctors
   const itemperpage = 8;
   const totalPages = Math.ceil(filteredUsers.length / itemperpage);
   const start = (currentPage - 1) * itemperpage;

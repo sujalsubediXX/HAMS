@@ -1,6 +1,7 @@
-// src/Components/Utils/AuthProvider.jsx
-import { createContext, useState, useContext, useEffect } from "react";
-import axios from "axios"
+import { createContext, useState, useContext, useEffect, useCallback } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -8,51 +9,65 @@ export const AuthProvider = ({ children }) => {
     const savedUser = localStorage.getItem("Users");
     return savedUser ? JSON.parse(savedUser) : null;
   });
-  const [userData, setUserdata] = useState([]);
+  const [userData, setUserData] = useState([]);
+  const [specialties, setSpecialties] = useState([]);
 
-  // AuthProvider.jsx
   const logout = () => {
     localStorage.removeItem("Users");
     setUser(null);
-    setUserdata([])
+    setUserData([]);
   };
+
   const login = (userdata) => {
     localStorage.setItem("Users", JSON.stringify(userdata));
     setUser(userdata);
   };
-  useEffect(() => {
+
+  const fetchUserData = useCallback(async () => {
     if (!user) return;
+    let urlpath = "";
+    if (user.role === "User") {
+      urlpath = `/api/user/userdata?email=${user.email}`;
+    } else if (user.role === "Doctor") {
+      urlpath = `/api/doctor/doctordata?email=${user.email}`;
+    } else {
+      urlpath = `/admin/admindata`;
+    }
 
-    const fetchUserData = async () => {
-      let urlpath = "";
-      if (user.role === "User") {
-        urlpath = `/api/user/userdata?email=${user.email}`;
-      } else if (user.role === "Doctor") {
-        urlpath = `/api/doctor/doctordata?email=${user.email}`;
+    try {
+      const res = await axios.get(urlpath);
+      if (res.status === 200) {
+        setUserData(res.data.data);
       } else {
-        urlpath = `/admin/admindata`;
+        console.log("No data found or error status", res.status);
       }
-
-      try {
-        const res = await axios.get(urlpath);
-        if (res.status === 200) {
-          setUserdata(res.data.data);
-        } else {
-          console.log("No data found or error status", res.status);
-        }
-      } catch (error) {
-        console.error("Error fetching the data from header:", error);
-      }
-    };
-
-    fetchUserData();
+    } catch (error) {
+      console.error("Error fetching the data from header:", error);
+    }
   }, [user]);
+
+  const fetchSpecialties = useCallback(async () => {
+    try {
+      const response = await axios.get("/api/specialty/getAllSpecialties");
+      setSpecialties(response.data.data || []);
+    } catch (error) {
+      console.error("Unable to fetch specialties:", error);
+      toast.error("Failed to load specialties.");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      fetchUserData();
+      fetchSpecialties();
+    }
+  }, [user, fetchUserData, fetchSpecialties]);
+
   return (
-    <AuthContext.Provider value={{ user, login, logout,userData }}>
+    <AuthContext.Provider value={{ user, login, logout, userData, specialties, fetchSpecialties }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-// Custom hook for easy use
 export const useAuth = () => useContext(AuthContext);

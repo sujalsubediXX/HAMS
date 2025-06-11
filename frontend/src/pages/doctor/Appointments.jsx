@@ -144,14 +144,15 @@ const Appointments = () => {
 
       {/* Appointments Table */}
       <div className="p-6 overflow-x-auto">
-        <table className="w-full text-left">
-          <thead>
-            <tr className="bg-gray-100 text-gray-700">
-              <th className="p-3">SN.</th>
-              <th className="p-3">Date</th>
-              <th className="p-3">Time</th>
-              <th className="p-3">Status</th>
-              <th className="p-3">Actions</th>
+        <table className="w-full border-collapse bg-white shadow-md rounded-lg">
+          <thead className="bg-blue-100 text-gray-600">
+            <tr >
+              <th className="p-3 border">SN.</th>
+              <th className="p-3 border">Patient Name</th>
+              <th className="p-3 border">Date</th>
+              <th className="p-3 border">Time</th>
+              <th className="p-3 border">Status</th>
+              <th className="p-3 border">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -163,11 +164,12 @@ const Appointments = () => {
               );
 
               return (
-                <tr key={appt._id} className="border-b hover:bg-gray-50">
-                  <td className="p-3">{start + index + 1}</td>
-                  <td className="p-3">{new Date(appt.date).toISOString().split("T")[0]}</td>
-                  <td className="p-3">{appt.startTime}-{appt.endTime}</td>
-                  <td className="p-3">
+                <tr key={appt._id} className="text-center text-gray-700">
+                  <td className="p-3 border">{start + index + 1}</td>
+                  <td className="p-3 border">{appt.patientName}</td>
+                  <td className="p-3 border">{new Date(appt.date).toISOString().split("T")[0]}</td>
+                  <td className="p-3 border">{appt.startTime}-{appt.endTime}</td>
+                  <td className="p-3 border">
                     <span
                       className={`px-2 py-1 rounded-md text-sm ${
                         appt.status === "completed"
@@ -180,7 +182,7 @@ const Appointments = () => {
                       {appt.status}
                     </span>
                   </td>
-                  <td className="p-3">
+                  <td className="p-3 border">
                     {appt.status === "cancelled" ? (
                       <span className="text-gray-400">Cancelled</span>
                     ) : (

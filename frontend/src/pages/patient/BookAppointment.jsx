@@ -7,9 +7,10 @@ import { useNavigate } from "react-router-dom";
 import doctorSpecialties from "../../Utils/Symptoms.js";
 
 export default function BookAppointment() {
-  const { user, userData } = useAuth();
+   const {user,specialties} = useAuth();
+
+   const specializations = specialties.map((spec) => spec.name);
   const navigate = useNavigate();
-  const [patient, setPatient] = useState({});
   const [step, setStep] = useState(1);
   const [symptom, setSymptom] = useState("");
   const [selectedSpecialty, setSelectedSpecialty] = useState("");
@@ -38,14 +39,14 @@ export default function BookAppointment() {
 
   useEffect(() => {
     if (user?.role) {
-      setPatient(userData);
+      
       setFormData((prev) => ({
         ...prev,
-        name: userData.name || "",
-        email: userData.email || "",
+        name:user.name,
+        email: user.email || "",
       }));
     }
-  }, [user, userData]);
+  }, [user]);
 
   // Handle input changes for form fields
   const handleChange = (e) => {
@@ -57,7 +58,7 @@ export default function BookAppointment() {
   useEffect(() => {
     const loaddata = {
       specialty: selectedSpecialty,
-      patientEmail: patient.email,
+      patientEmail: user.email,
     };
     const fetchMatchDoctor = async () => {
       try {
@@ -238,7 +239,7 @@ export default function BookAppointment() {
 
             <p className="text-sm text-gray-600 mb-2">Or choose a specialty:</p>
             <div className="flex flex-wrap gap-2 mb-6">
-              {[...new Set(Object.values(doctorSpecialties))].map(
+              {specializations.map(
                 (spec, idx) => (
                   <button
                     key={idx}
@@ -250,7 +251,7 @@ export default function BookAppointment() {
                 )
               )}
             </div>
-
+         
             <button
               onClick={handleSymptomSubmit}
               className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition cursor-pointer"
@@ -273,9 +274,8 @@ export default function BookAppointment() {
                     type="text"
                     name="name"
                     value={formData.name}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                    disabled
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed"
                   />
                 </div>
 

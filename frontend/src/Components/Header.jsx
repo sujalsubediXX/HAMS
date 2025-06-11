@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import logo1 from "/logo1.jpg";
 import patientimage from "/patientimage.png";
 import ConfirmAlert from "./ConfirmAlert";
-import axios from "axios";
+
 
 const Header = () => {
   const [showMenu, setShowMenu] = useState(false);

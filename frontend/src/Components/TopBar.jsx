@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import { FaUsers, FaClipboardList, FaCog, FaInfoCircle } from "react-icons/fa";
 import { useAuth } from "../Utils/AuthProvider";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 import doctorimg from "/doctoriamge.png";
 import { toast } from "react-hot-toast"; 
 
@@ -11,7 +12,7 @@ const TopBar = () => {
   const [previewImg, setPreviewImg] = useState(null);
   const fileInputRef = useRef(null);
   
-  
+  const location = useLocation();
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -50,7 +51,7 @@ const TopBar = () => {
   };
 
   return (
-    <div className="h-[12vh] bg-purple-500 text-white px-6 py-3 flex items-center justify-between w-full">
+    <div className="h-[12vh] bg-black  text-white px-6 py-3 flex items-center justify-between w-full">
       <div className="flex items-center space-x-4">
         {location.pathname === "/doctor/profile" && (
           <>
