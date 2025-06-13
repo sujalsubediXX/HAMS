@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import ConfirmAlert from "../../Components/ConfirmAlert.jsx";
-import { useAuth } from "../../Utils/AuthProvider.jsx";
 
 const ManageSpecialty = () => {
   const [specialty, setSpecialty] = useState([]);
@@ -12,14 +11,14 @@ const ManageSpecialty = () => {
   const [data, setData] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const { specialties, fetchSpecialties } = useAuth();
-
-  useEffect(() => {
-    setSpecialty(specialties);
-  }, [specialties]);
-
-  const refreshSpecialties = async () => {
-    await fetchSpecialties();
+  const fetchSpecialties = async () => {
+    try {
+      const response = await axios.get("/api/specialty/getAllSpecialties");
+      setSpecialty(response.data.data || []);
+    } catch (error) {
+      console.error("Unable to fetch specialties:", error);
+      toast.error("Failed to load specialties.");
+    }
   };
 
   const handleAddSpecialty = async (e) => {
@@ -32,7 +31,6 @@ const ManageSpecialty = () => {
       await axios.post("/api/specialty/addSpecialty", { name: data });
       toast.success("Specialty added successfully.");
       setData("");
-      refreshSpecialties();
     } catch (error) {
       console.error("Unable to add Specialty:", error);
       toast.error("Failed to add Specialty.");
@@ -41,10 +39,11 @@ const ManageSpecialty = () => {
 
   const handleEditSpecialty = async (id) => {
     try {
-      await axios.put(`/api/specialty/updateSpecialty/${id}`, { name: editMode.data });
+      await axios.put(`/api/specialty/updateSpecialty/${id}`, {
+        name: editMode.data,
+      });
       toast.success("Specialty updated successfully.");
       setEditMode({ status: false, data: "" });
-      refreshSpecialties();
     } catch (error) {
       console.error("Unable to edit Specialty:", error);
       toast.error("Failed to update Specialty.");
@@ -55,7 +54,6 @@ const ManageSpecialty = () => {
     try {
       await axios.delete(`/api/specialty/deleteSpecialty/${id}`);
       toast.success("Specialty deleted successfully.");
-      refreshSpecialties();
     } catch (error) {
       console.error("Unable to delete Specialty:", error);
       toast.error("Failed to delete Specialty.");
@@ -63,14 +61,18 @@ const ManageSpecialty = () => {
     setShowConfirm(false);
     setSelectedId("");
   };
-
+  useEffect(() => {
+    fetchSpecialties();
+  }, [handleAddSpecialty, handleEditSpecialty, handleDeleteSpecialty]);
   const filteredSpecialty = specialty.filter((item) =>
     (item?.name || "").toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
     <div className="px-6 pt-2 bg-gray-50 w-full">
-      <h1 className="text-2xl font-bold mb-5 text-gray-800">Manage Specialty</h1>
+      <h1 className="text-2xl font-bold mb-5 text-gray-800">
+        Manage Specialty
+      </h1>
 
       {/* Add New Specialty */}
       <div className="bg-white shadow rounded-lg p-4 mb-5">
@@ -164,14 +166,18 @@ const ManageSpecialty = () => {
       {editMode.status && (
         <section className="fixed inset-0 w-full h-full z-50 flex justify-center items-center bg-[#0000007d] overflow-hidden">
           <div className="w-[66%] sm:w-[50%] md:w-[40%] lg:w-[28%] bg-white rounded-2xl shadow-sm px-8 py-6">
-            <h1 className="text-lg font-semibold mb-2 text-center">Edit Specialty</h1>
+            <h1 className="text-lg font-semibold mb-2 text-center">
+              Edit Specialty
+            </h1>
             <div className="mb-6">
               <label className="my-4">Specialty :</label>
               <input
                 type="text"
                 value={editMode.data}
                 placeholder="Specialty Name"
-                onChange={(e) => setEditMode((prev) => ({ ...prev, data: e.target.value }))}
+                onChange={(e) =>
+                  setEditMode((prev) => ({ ...prev, data: e.target.value }))
+                }
                 className="w-full border px-3 py-2 rounded-md focus:ring focus:ring-blue-300 my-4"
               />
             </div>

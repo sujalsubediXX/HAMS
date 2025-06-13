@@ -22,7 +22,7 @@ const TotalAppointments = () => {
         const res = await axios.get("/api/appointment/getappointmentdata");
         if (res.status === 200) {
           setAppointments(res.data.data);
-          console.log(res.data.data);
+         
         }
       } catch (error) {
         console.log("Error fetching appointment data");
