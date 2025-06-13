@@ -23,14 +23,10 @@ const AdminSetting = () => {
     alert('Email updated successfully!');
   };
 
-  const toggleNotifications = () => {
-    setNotifications(!notifications);
-    // Add logic to update notification preferences (e.g., API call)
-    alert(`Notifications ${!notifications ? 'enabled' : 'disabled'}!`);
-  };
+
 
   return (
-    <div className="p-6 max-w-3xl mx-auto bg-white shadow-md rounded-md">
+    <div className="p-6 w-4/5 mx-auto bg-white shadow-md rounded-md">
       <h2 className="text-2xl font-bold mb-6 text-gray-800">Admin Settings</h2>
 
       {/* Change Password Section */}
@@ -99,19 +95,6 @@ const AdminSetting = () => {
         </button>
       </form>
 
-      {/* Notification Preferences Section */}
-      <div className="mb-8">
-        <h3 className="text-xl font-semibold mb-4 text-gray-700">Notification Preferences</h3>
-        <label className="flex items-center">
-          <input
-            type="checkbox"
-            checked={notifications}
-            onChange={toggleNotifications}
-            className="mr-2 focus:ring-blue-500"
-          />
-          <span className="text-gray-600">Enable Notifications</span>
-        </label>
-      </div>
     </div>
   );
 };
