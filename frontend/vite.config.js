@@ -8,7 +8,7 @@ export default defineConfig({
     host: true,
     proxy: {
       '/api': {
-        target: 'https://hams-eegi.onrender.com/', // ✅ your Render backend
+        target: 'https://hams-eegi.onrender.com', // ✅ your Render backend
         changeOrigin: true,
         secure: false,
         configure: (proxy, options) => {
