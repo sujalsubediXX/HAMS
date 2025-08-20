@@ -26,16 +26,19 @@ export const registeruser = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+
+
     const createuser = await User.create({
-      firstName,
-      lastName,
-      email,
-      password: hashedPassword,
-      age,
-      phone: phonenumber,
-      gender,
-      location,
-    });
+  firstName,
+  lastName,
+  email,
+  password: hashedPassword,
+  age,
+  phone: phonenumber,   // ✅ now matches schema
+  gender,
+  location,
+});
+
 
     if (createuser) {
       res.status(201).json({ message: "User Registered Successfully" });
