@@ -28,7 +28,7 @@ const ManageSpecialty = () => {
       return;
     }
     try {
-      await axios.post("/api/specialty/addSpecialty", { name: data });
+      await axios.post("https://hams-eegi.onrender.com/api/specialty/addSpecialty", { name: data });
       toast.success("Specialty added successfully.");
       setData("");
     } catch (error) {
@@ -39,7 +39,7 @@ const ManageSpecialty = () => {
 
   const handleEditSpecialty = async (id) => {
     try {
-      await axios.put(`/api/specialty/updateSpecialty/${id}`, {
+      await axios.put(`https://hams-eegi.onrender.com/api/specialty/updateSpecialty/${id}`, {
         name: editMode.data,
       });
       toast.success("Specialty updated successfully.");
@@ -52,7 +52,7 @@ const ManageSpecialty = () => {
 
   const handleDeleteSpecialty = async (id) => {
     try {
-      await axios.delete(`/api/specialty/deleteSpecialty/${id}`);
+      await axios.delete(`https://hams-eegi.onrender.com/api/specialty/deleteSpecialty/${id}`);
       toast.success("Specialty deleted successfully.");
     } catch (error) {
       console.error("Unable to delete Specialty:", error);
