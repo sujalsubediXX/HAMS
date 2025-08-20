@@ -11,7 +11,9 @@ export default defineConfig({
      host: true ,
     proxy: {
       '/api': {
-        target: 'http://localhost:3000', // ✅ your backend port
+        
+       // target: 'http://localhost:3000', 
+        target : 'https://hams-eegi.onrender.com/'
         changeOrigin: true,
         secure: false,
         configure: (proxy, options) => {
