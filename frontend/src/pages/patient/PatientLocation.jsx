@@ -23,13 +23,15 @@ export const PatientLocation = () => {
   const center = [27.7172, 85.324];
   const [locations, setlocations] = useState([]);
   console.log(user.email);
+
   useEffect(() => {
     const fetchlocation = async () => {
       try {
         const getlocation = await axios.get(
-          `/api/user/getuserlocation?email=${user.email}`
+          `https://hams-eegi.onrender.com/api/user/getuserlocation?email=${user.email}`,
+          { withCredentials: true }
         );
-        if (getlocation.status == 200) {
+        if (getlocation.status === 200) {
           console.log(getlocation.data.data);
           setlocations((prev) => [
             ...prev,
@@ -50,7 +52,10 @@ export const PatientLocation = () => {
       }
 
       try {
-        const res = await axios.get("/api/hospital/location");
+        const res = await axios.get(
+          "https://hams-eegi.onrender.com/api/hospital/location",
+          { withCredentials: true }
+        );
         if (res.status === 201) {
           if (Array.isArray(res.data.location)) {
             setlocations((prev) => [...prev, ...res.data.location]);
@@ -66,7 +71,7 @@ export const PatientLocation = () => {
             ]);
           }
         } else {
-          toast.error("Failed to fetch branch location.");
+          console.error("Failed to fetch branch location.");
         }
       } catch (error) {
         console.log(error);
@@ -74,10 +79,10 @@ export const PatientLocation = () => {
     };
 
     fetchlocation();
-  }, []);
+  }, [user.email]);
 
   return (
-    <main className="flex flex-col  pt-[16vh]">
+    <main className="flex flex-col pt-[16vh]">
       <div
         style={{ height: "600px", width: "90%", padding: "1rem" }}
         className="mx-auto z-10"
