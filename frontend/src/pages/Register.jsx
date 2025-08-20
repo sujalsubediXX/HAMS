@@ -11,7 +11,7 @@ const Register = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  const BASE_URL = import.meta.env.VITE_API_BASE_URL || ""; // Make sure this points to your backend or leave blank if serverless
+  const BASE_URL = "https://hams-eegi.onrender.com"; // Make sure this points to your backend or leave blank if serverless
 
   // Redirect if already logged in
   useEffect(() => {
