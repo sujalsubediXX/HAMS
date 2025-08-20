@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
   const [specialties, setSpecialties] = useState([]);
 
   // Base URL for backend (works locally and in production)
-  const BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
+  const BASE_URL = "https://hams-eegi.onrender.com";
 
   // Logout function
   const logout = () => {
