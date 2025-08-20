@@ -1,0 +1,19 @@
+@import "tailwindcss";
+/* @plugin "daisyui"; */
+
+ html{
+  color: black;
+  background-color: white;
+} 
+body {
+overflow-x: hidden;
+
+} 
+input[type="time"]::-webkit-calendar-picker-indicator,input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: brightness(0); /* This inverts white to black or vice versa */
+  opacity: 1;
+  cursor: pointer;
+}
+.noscrollbar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge */
+  }
