@@ -27,7 +27,7 @@ const AdminLogin = () => {
       setLoading(true);
       let res = "";
       let location = "";
-      res = await axios.post("/api/admin/login", {
+      res = await axios.post("https://hams-eegi.onrender.com/api/admin/login", {
         email,
         password,
       });
