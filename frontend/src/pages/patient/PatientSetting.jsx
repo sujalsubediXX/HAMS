@@ -58,7 +58,7 @@ export default function PatientSetting() {
   
     const handledelete = async () => {
       try {
-        const res = await axios.delete("/api/user/deleteaccount", {
+        const res = await axios.delete("https://hams-eegi.onrender.com/api/user/deleteaccount", {
           data: { email: user.email }, // ✅ pass data here properly
         });
     
