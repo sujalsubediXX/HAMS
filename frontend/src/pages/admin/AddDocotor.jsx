@@ -4,22 +4,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useAuth } from "../../Utils/AuthProvider.jsx";
-// const specializations = [
-//   "Cardiologist",
-//   "Pulmonologist",
-//   "Dermatologist",
-//   "General Physician",
-//   "Neurologist",
-//   "Pediatrician",
-//   "Psychiatrist",
-//   "ENT Specialist",
-//   "Radiologist",
-//   "Gastroenterologist",
-//   "Orthopedic",
-//   "Ophthalmologist",
-//   "Gynecologist",
-//   "Endocrinologist",
-// ];
+
 
 const daysOfWeek = [
   "Sunday",
@@ -39,7 +24,7 @@ const AddDoctor = () => {
   useEffect(() => {
     const fetchlocation = async () => {
       try {
-        const res = await axios.get("/api/hospital/location");
+        const res = await axios.get("https://hams-eegi.onrender.com/api/hospital/location");
         if (res.status == 201) {
           setlocations(res.data.location);
         } else {
@@ -121,7 +106,7 @@ const AddDoctor = () => {
       };
       data.address = selectedBranch.name;
 
-      const response = await axios.post("/api/doctor/appointdoctor", data);
+      const response = await axios.post("https://hams-eegi.onrender.com/api/doctor/appointdoctor", data);
       console.log(data);
 
       if (response.status === 200) {
