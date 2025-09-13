@@ -13,7 +13,7 @@ function BookAppointment() {
     try {
       const loaddata = { symptom, date };
       const res = await axios.post(
-        "https://hams-eegi.onrender.com/api/appointment/matchDoctors",
+        "https://hams-7zpe.onrender.com/api/appointment/matchDoctors",
         loaddata,
         { withCredentials: true }
       );
@@ -33,7 +33,7 @@ function BookAppointment() {
         symptom,
       };
       const res = await axios.post(
-        "https://hams-eegi.onrender.com/api/appointment/bookappointment",
+        "https://hams-7zpe.onrender.com/api/appointment/bookappointment",
         appointment,
         { withCredentials: true }
       );

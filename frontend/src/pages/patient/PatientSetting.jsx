@@ -30,7 +30,7 @@ export default function PatientSetting() {
       toast.error("Password length should be more than 6 characters.");
     } else {
       try {
-        const res = await axios.put(`/api/user/updatepassword`, {
+        const res = await axios.put(`https://hams-7zpe.onrender.com/api/user/updatepassword`, {
           email: user.email,
           pass,
           cpass,
@@ -58,8 +58,8 @@ export default function PatientSetting() {
   
     const handledelete = async () => {
       try {
-        const res = await axios.delete("https://hams-eegi.onrender.com/api/user/deleteaccount", {
-          data: { email: user.email }, // ✅ pass data here properly
+        const res = await axios.delete("https://hams-7zpe.onrender.com/api/user/deleteaccount", {
+          data: { email: user.email }, 
         });
     
         if (res.status === 201) {

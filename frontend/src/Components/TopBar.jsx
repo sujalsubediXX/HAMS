@@ -23,7 +23,7 @@ const TopBar = () => {
       imagedata.append("email", userData.email);
 
       try {
-        const res = await axios.post("/api/doctor/insertdoctorimage", imagedata, {
+        const res = await axios.post("https://hams-7zpe.onrender.com/api/doctor/insertdoctorimage", imagedata, {
           headers: {
             "Content-Type": "multipart/form-data",
           },

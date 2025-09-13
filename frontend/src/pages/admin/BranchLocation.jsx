@@ -23,7 +23,7 @@ export const BranchLocation = () => {
   useEffect(()=>{
     const fetchlocation=async()=>{
         try {
-            const res=await axios.get("https://hams-eegi.onrender.com/api/hospital/location");
+            const res=await axios.get("https://hams-7zpe.onrender.com/api/hospital/location");
             if(res.status==201){
            setlocations(res.data.location)
             }else{

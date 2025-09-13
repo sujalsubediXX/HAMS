@@ -19,7 +19,7 @@ const TotalAppointments = () => {
   useEffect(() => {
     (async () => {
       try {
-        const res = await axios.get("https://hams-eegi.onrender.com/api/appointment/getappointmentdata");
+        const res = await axios.get("https://hams-7zpe.onrender.com/api/appointment/getappointmentdata");
         if (res.status === 200) {
           setAppointments(res.data.data);
          

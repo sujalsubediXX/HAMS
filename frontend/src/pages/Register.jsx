@@ -11,7 +11,7 @@ const Register = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  const BASE_URL = "https://hams-eegi.onrender.com"; // Make sure this points to your backend or leave blank if serverless
+  const BASE_URL = "https://hams-7zpe.onrender.com"; 
 
   // Redirect if already logged in
   useEffect(() => {

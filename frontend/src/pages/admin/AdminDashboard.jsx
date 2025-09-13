@@ -46,7 +46,7 @@ const AdminDashboard = () => {
 
   const fetchGenderData = async () => {
     try {
-      const res = await axios.get("https://hams-eegi.onrender.com/api/user/gender-stats");
+      const res = await axios.get("https://hams-7zpe.onrender.com/api/user/gender-stats");
       const chartData = Object.entries(res.data).map(([gender, count]) => ({
         gender: gender.charAt(0).toUpperCase() + gender.slice(1),
         count,
@@ -58,7 +58,7 @@ const AdminDashboard = () => {
   };
   const fetchAppointmentStats = async () => {
     try {
-      const res = await axios.get("https://hams-eegi.onrender.com/api/appointment/appointmentstats");
+      const res = await axios.get("https://hams-7zpe.onrender.com/api/appointment/appointmentstats");
       const chartData = Object.entries(res.data).map(([status, count]) => ({
         status: status.charAt(0).toUpperCase() + status.slice(1),
         count,
@@ -70,7 +70,7 @@ const AdminDashboard = () => {
   };
   const getTopSpecialties = async () => {
     try {
-      const res = await axios.get("https://hams-eegi.onrender.com/api/appointment/getTopSpecialties");
+      const res = await axios.get("https://hams-7zpe.onrender.com/api/appointment/getTopSpecialties");
       const chartData = res.data.map((item) => ({
         specialty: item._id.charAt(0).toUpperCase() + item._id.slice(1),
         value: item.count,
@@ -83,7 +83,7 @@ const AdminDashboard = () => {
 
   const fetchAgeStats = async () => {
     try {
-      const res = await axios.get("https://hams-eegi.onrender.com/api/user/getAgeStats");
+      const res = await axios.get("https://hams-7zpe.onrender.com/api/user/getAgeStats");
       const chartData = Object.entries(res.data).map(([ageGroup, count]) => ({
         ageGroup: ageGroup.charAt(0).toUpperCase() + ageGroup.slice(1),
         count,
@@ -95,7 +95,7 @@ const AdminDashboard = () => {
   };
   const fetchdaydata = async () => {
     try {
-      const res = await axios.get("https://hams-eegi.onrender.com/api/appointment/getchartdata");
+      const res = await axios.get("https://hams-7zpe.onrender.com/api/appointment/getchartdata");
       setdaydata(res.data);
     } catch (error) {
       console.error("Error fetching appointments:", error);
@@ -104,7 +104,7 @@ const AdminDashboard = () => {
 
   const fetchDoctorData = async () => {
     try {
-      const res = await axios.get("https://hams-eegi.onrender.com/api/appointment/chartDoctorAppointments");
+      const res = await axios.get("https://hams-7zpe.onrender.com/api/appointment/chartDoctorAppointments");
       setDoctorData(res.data);
     } catch (error) {
       console.error("Error fetching doctor appointment data:", error);

@@ -16,7 +16,7 @@ const Patients = () => {
       if (user?.email) {
         try {
           const res = await axios.get(
-            "https://hams-eegi.onrender.com/api/appointment/patients-by-doctor-email",
+            "https://hams-7zpe.onrender.com/api/appointment/patients-by-doctor-email",
             {
               params: { email: user.email },
             }

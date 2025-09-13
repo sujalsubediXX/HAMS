@@ -9,7 +9,7 @@ const UploadImage = () => {
         e.preventDefault();
         if(file?.name){
             try {
-                const res=await axios.post("https://hams-eegi.onrender.com/api/doctor/image",formdata,{
+                const res=await axios.post("https://hams-7zpe.onrender.com/api/doctor/image",formdata,{
                     headers:{
                         "Content-Type":"multipart/form-data"
                     }

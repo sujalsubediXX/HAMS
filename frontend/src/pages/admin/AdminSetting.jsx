@@ -5,7 +5,7 @@ const AdminSetting = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [email, setEmail] = useState('');
-  const [notifications, setNotifications] = useState(true);
+ 
 
   const handlePasswordChange = (e) => {
     e.preventDefault();

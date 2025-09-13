@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
   const [specialties, setSpecialties] = useState([]);
 
   // Base URL for backend (works locally and in production)
-  const BASE_URL = "https://hams-eegi.onrender.com";
+  const BASE_URL = "https://hams-7zpe.onrender.com";
 
   // Logout function
   const logout = () => {
@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }) => {
     }
   }, [user, BASE_URL]);
 
-  // Fetch specialties
+  
   const fetchSpecialties = useCallback(async () => {
     try {
       const response = await axios.get(`${BASE_URL}/api/specialty/getAllSpecialties`);
@@ -77,7 +77,7 @@ export const AuthProvider = ({ children }) => {
     }
   }, [BASE_URL]);
 
-  // Load data when user logs in
+
   useEffect(() => {
     if (user) {
       fetchUserData();
@@ -87,7 +87,7 @@ export const AuthProvider = ({ children }) => {
     }
   }, [user, fetchUserData, fetchSpecialties]);
 
-  // Provide context values
+ 
   return (
     <AuthContext.Provider
       value={{
@@ -104,5 +104,4 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// Custom hook to use AuthContext
 export const useAuth = () => useContext(AuthContext);

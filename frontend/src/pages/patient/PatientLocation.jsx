@@ -28,7 +28,7 @@ export const PatientLocation = () => {
     const fetchlocation = async () => {
       try {
         const getlocation = await axios.get(
-          `https://hams-eegi.onrender.com/api/user/getuserlocation?email=${user.email}`,
+          `https://hams-7zpe.onrender.com/api/user/getuserlocation?email=${user.email}`,
           { withCredentials: true }
         );
         if (getlocation.status === 200) {
@@ -53,7 +53,7 @@ export const PatientLocation = () => {
 
       try {
         const res = await axios.get(
-          "https://hams-eegi.onrender.com/api/hospital/location",
+          "https://hams-7zpe.onrender.com/api/hospital/location",
           { withCredentials: true }
         );
         if (res.status === 201) {

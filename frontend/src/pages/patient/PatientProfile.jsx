@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import ConfirmAlert from "../../Components/ConfirmAlert.jsx";
 import { useAuth } from "../../Utils/AuthProvider";
 
-const BASE_URL = "https://hams-eegi.onrender.com";
+const BASE_URL = "https://hams-7zpe.onrender.com";
 
 const PatientProfile = () => {
   const [uservalue, setuservalue] = useState(null);

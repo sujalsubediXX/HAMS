@@ -14,7 +14,7 @@ const ManagePatients = () => {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const res = await axios.get("https://hams-eegi.onrender.com/api/user/userdata");
+        const res = await axios.get("https://hams-7zpe.onrender.com/api/user/userdata");
         setPatients(res.data.data);
       } catch (error) {
         console.error(`Fetching patient error: ${error.message}`);

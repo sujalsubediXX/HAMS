@@ -24,7 +24,7 @@ const AddDoctor = () => {
   useEffect(() => {
     const fetchlocation = async () => {
       try {
-        const res = await axios.get("https://hams-eegi.onrender.com/api/hospital/location");
+        const res = await axios.get("https://hams-7zpe.onrender.com/api/hospital/location");
         if (res.status == 201) {
           setlocations(res.data.location);
         } else {
@@ -106,7 +106,7 @@ const AddDoctor = () => {
       };
       data.address = selectedBranch.name;
 
-      const response = await axios.post("https://hams-eegi.onrender.com/api/doctor/appointdoctor", data);
+      const response = await axios.post("https://hams-7zpe.onrender.com/api/doctor/appointdoctor", data);
       console.log(data);
 
       if (response.status === 200) {
