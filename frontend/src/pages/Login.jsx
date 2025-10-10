@@ -21,13 +21,13 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => {
+  
       if (user?.role === "User") {
         navigate("/");
       } else if (user?.role === "Doctor") {
         navigate("/doctor/profile");
       }
-    }, 1000);
+
   }, [user, navigate]);
 
   const setLogin = async () => {
@@ -51,12 +51,9 @@ const Login = () => {
       }
 
       const userdata = { email, role, name: res.data.username };
-
-      setTimeout(() => {
         toast.success("Login Success");
         login(userdata);
         navigate(location);
-      }, 2000);
     } catch (error) {
       setLoading(false);
 
