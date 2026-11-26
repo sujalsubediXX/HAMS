@@ -11,7 +11,8 @@ const Register = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  const BASE_URL = "https://hams-7zpe.onrender.com"; 
+  // const BASE_URL = "https://hams-7zpe.onrender.com"; 
+  const BASE_URL = "http://localhost:3000"; // Use the same base URL as in AuthProvider
 
   // Redirect if already logged in
   useEffect(() => {

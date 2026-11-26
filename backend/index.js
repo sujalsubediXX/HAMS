@@ -1,5 +1,5 @@
-import express from "express";
 import dotenv from "dotenv";
+import express from "express";
 import dbconnect from "./utils/DBconnection.js";
 import cors from "cors";
 
@@ -19,9 +19,9 @@ app.use(cors());
 app.use(express.json());
 
 const port = process.env.PORT || 3000;
-const dblink = process.env.MONGODB_URL;
 
-dbconnect(dblink).then(() => {
+
+dbconnect().then(() => {
   appointmentReminderJob();
   app.use("/api/user", userRouter);
   app.use("/api/doctor", doctorRouter);

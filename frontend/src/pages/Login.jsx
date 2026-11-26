@@ -9,7 +9,8 @@ const datas = {
   role: ["User", "Doctor"],
 };
 
-const BASE_URL = "https://hams-7zpe.onrender.com"; 
+const BASE_URL = "http://localhost:3000"; // Use the same base URL as in AuthProvider
+// const BASE_URL = "https://hams-7zpe.onrender.com"; 
 
 const Login = () => {
   const navigate = useNavigate();
