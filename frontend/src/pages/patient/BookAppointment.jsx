@@ -5,7 +5,7 @@ import { useAuth } from "../../Utils/AuthProvider.jsx";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import doctorSpecialties from "../../Utils/Symptoms.js";
-
+import API_BASE_URL from "../../config/api";
 export default function BookAppointment() {
    const {user,specialties} = useAuth();
 
@@ -62,7 +62,7 @@ export default function BookAppointment() {
     };
     const fetchMatchDoctor = async () => {
       try {
-        const res = await axios.post("https://hams-7zpe.onrender.com/api/appointment/matchDoctors", loaddata);
+        const res = await axios.post(`${API_BASE_URL}/api/appointment/matchDoctors`, loaddata);
         setFilteredDoctors(res.data.data);
       } catch (error) {
         console.log("No data");
@@ -147,7 +147,7 @@ export default function BookAppointment() {
 
     try {
       const res = await axios.post(
-        "https://hams-7zpe.onrender.com/api/appointment/bookappointment",
+        `${API_BASE_URL}/api/appointment/bookappointment`,
         appointment
       );
 

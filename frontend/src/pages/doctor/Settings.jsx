@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ConfirmAlert from "../../Components/ConfirmAlert.jsx";
-
+import API_BASE_URL from "../../config/api";
 const Settings = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
@@ -31,7 +31,7 @@ const Settings = () => {
       toast.error("Password length should be more than 6 characters.");
     } else {
       try {
-        const res = await axios.put(`https://hams-7zpe.onrender.com/api/doctor/updatepassword`, {
+        const res = await axios.put(`${API_BASE_URL}/api/doctor/updatepassword`, {
           email: user.email,
           pass,
           cpass,
@@ -53,7 +53,7 @@ const Settings = () => {
 
   const handledelete = async () => {
     try {
-      const res = await axios.delete("https://hams-7zpe.onrender.com/api/doctor/deleteaccount", {
+      const res = await axios.delete(`${API_BASE_URL}/api/doctor/deleteaccount`, {
         data: { email: user.email },
       });
 

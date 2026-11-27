@@ -3,7 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../Utils/AuthProvider";
 import toast from "react-hot-toast";
-
+import API_BASE_URL from "../../config/api";
 const Appointments = () => {
   const { user ,userData} = useAuth();
   const [doctordata, setDoctordata] = useState({});
@@ -32,7 +32,7 @@ const Appointments = () => {
     const fetchAppointments = async () => {
       if (doctordata?._id) {
         try {
-          const res = await axios.get(`https://hams-7zpe.onrender.com/api/appointment/getappointment?doctorID=${doctordata._id}`);
+          const res = await axios.get(`${API_BASE_URL}/api/appointment/getappointment?doctorID=${doctordata._id}`);
           if (res.status === 200) {
             setAppointmentdata(res.data.appointment);
           }
@@ -49,7 +49,7 @@ const Appointments = () => {
     const fetchMedicalData = async () => {
       if (doctordata?._id) {
         try {
-          const res = await axios.get(`https://hams-7zpe.onrender.com/api/medicalhistory/getMedicalhistory?doctorID=${doctordata._id}`);
+          const res = await axios.get(`${API_BASE_URL}/api/medicalhistory/getMedicalhistory?doctorID=${doctordata._id}`);
           if (res.status === 200) {
           
             setMedicaldata(res.data.data);
@@ -73,8 +73,8 @@ const Appointments = () => {
     try {
       const isUpdating = selecteduser.status === "completed";
       const endpoint = isUpdating
-        ? "https://hams-7zpe.onrender.com/api/medicalhistory/updateMedicalData"
-        : "https://hams-7zpe.onrender.com/api/medicalhistory/insertMedicalData";
+        ? `${API_BASE_URL}/api/medicalhistory/updateMedicalData`
+        : `${API_BASE_URL}/api/medicalhistory/insertMedicalData`;
 
       const payload = {
         patientID: selecteduser.patientID,

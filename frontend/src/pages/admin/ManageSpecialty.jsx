@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import ConfirmAlert from "../../Components/ConfirmAlert.jsx";
-
+import API_BASE_URL from "../../config/api";
 const ManageSpecialty = () => {
   const [specialty, setSpecialty] = useState([]);
   const [selectedId, setSelectedId] = useState("");
@@ -13,7 +13,7 @@ const ManageSpecialty = () => {
 
   const fetchSpecialties = async () => {
     try {
-      const response = await axios.get("https://hams-7zpe.onrender.com/api/specialty/getAllSpecialties");
+      const response = await axios.get(`${API_BASE_URL}/api/specialty/getAllSpecialties`);
       setSpecialty(response.data.data || []);
     } catch (error) {
       console.error("Unable to fetch specialties:", error);
@@ -28,7 +28,7 @@ const ManageSpecialty = () => {
       return;
     }
     try {
-      await axios.post("https://hams-7zpe.onrender.com/api/specialty/addSpecialty", { name: data });
+      await axios.post(`${API_BASE_URL}/api/specialty/addSpecialty`, { name: data });
       toast.success("Specialty added successfully.");
       setData("");
     } catch (error) {
@@ -39,7 +39,7 @@ const ManageSpecialty = () => {
 
   const handleEditSpecialty = async (id) => {
     try {
-      await axios.put(`https://hams-7zpe.onrender.com/api/specialty/updateSpecialty/${id}`, {
+      await axios.put(`${API_BASE_URL}/api/specialty/updateSpecialty/${id}`, {
         name: editMode.data,
       });
       toast.success("Specialty updated successfully.");
@@ -52,7 +52,7 @@ const ManageSpecialty = () => {
 
   const handleDeleteSpecialty = async (id) => {
     try {
-      await axios.delete(`https://hams-7zpe.onrender.com/api/specialty/deleteSpecialty/${id}`);
+      await axios.delete(`${API_BASE_URL}/api/specialty/deleteSpecialty/${id}`);
       toast.success("Specialty deleted successfully.");
     } catch (error) {
       console.error("Unable to delete Specialty:", error);
