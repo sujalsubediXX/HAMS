@@ -3,7 +3,7 @@ import axios from "axios";
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
-
+import API_BASE_URL from "../../config/api";
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
@@ -23,7 +23,7 @@ export const BranchLocation = () => {
   useEffect(()=>{
     const fetchlocation=async()=>{
         try {
-            const res=await axios.get("https://hams-7zpe.onrender.com/api/hospital/location");
+            const res=await axios.get(`${API_BASE_URL}/api/hospital/location`);
             if(res.status==201){
            setlocations(res.data.location)
             }else{

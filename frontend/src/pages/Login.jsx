@@ -4,13 +4,11 @@ import { FaEyeSlash, FaEye } from "react-icons/fa";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useAuth } from "../Utils/AuthProvider";
-
+import API_BASE_URL from "../config/api";
 const datas = {
   role: ["User", "Doctor"],
 };
 
-const BASE_URL = "http://localhost:3000"; // Use the same base URL as in AuthProvider
-// const BASE_URL = "https://hams-7zpe.onrender.com"; 
 
 const Login = () => {
   const navigate = useNavigate();
@@ -38,13 +36,13 @@ const Login = () => {
       let location;
 
       if (role === "User") {
-        res = await axios.post(`${BASE_URL}/api/user/login`, {
+        res = await axios.post(`${API_BASE_URL}/api/user/login`, {
           email,
           password,
         });
         location = "/";
       } else if (role === "Doctor") {
-        res = await axios.post(`${BASE_URL}/api/doctor/login`, {
+        res = await axios.post(`${API_BASE_URL}/api/doctor/login`, {
           email,
           password,
         });

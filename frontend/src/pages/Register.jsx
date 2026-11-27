@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import API_BASE_URL from "../config/api";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../Utils/AuthProvider.jsx";
@@ -11,8 +12,6 @@ const Register = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  // const BASE_URL = "https://hams-7zpe.onrender.com"; 
-  const BASE_URL = "http://localhost:3000"; // Use the same base URL as in AuthProvider
 
   // Redirect if already logged in
   useEffect(() => {
@@ -66,7 +65,7 @@ const Register = () => {
 
     try {
       setLoading(true);
-      const response = await axios.post(`${BASE_URL}/api/user/register`, data);
+      const response = await axios.post(`${API_BASE_URL}/api/user/register`, data);
 
       if (response.status === 201) {
         toast.success("Registration successful!");
