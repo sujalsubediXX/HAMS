@@ -1,7 +1,7 @@
 import { createContext, useState, useContext, useEffect, useCallback } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-
+import API_BASE_URL from "../config/api";
 // Create AuthContext
 const AuthContext = createContext();
 
@@ -20,8 +20,7 @@ export const AuthProvider = ({ children }) => {
   const [userData, setUserData] = useState([]);
   const [specialties, setSpecialties] = useState([]);
 
-  // Base URL for backend (works locally and in production)
-  const BASE_URL = "https://hams-7zpe.onrender.com";
+ 
 
   // Logout function
   const logout = () => {
@@ -54,7 +53,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     try {
-      const res = await axios.get(`${BASE_URL}${urlpath}`);
+      const res = await axios.get(`${API_BASE_URL}${urlpath}`);
       if (res.status === 200) {
         setUserData(res.data.data);
       } else {
@@ -64,18 +63,18 @@ export const AuthProvider = ({ children }) => {
       console.error("Error fetching user data:", error);
       toast.error("Failed to fetch user data.");
     }
-  }, [user, BASE_URL]);
+  }, [user, API_BASE_URL]);
 
   
   const fetchSpecialties = useCallback(async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/api/specialty/getAllSpecialties`);
+      const response = await axios.get(`${API_BASE_URL}/api/specialty/getAllSpecialties`);
       setSpecialties(response.data.data || []);
     } catch (error) {
       console.error("Unable to fetch specialties:", error);
       toast.error("Failed to load specialties.");
     }
-  }, [BASE_URL]);
+  }, [API_BASE_URL]);
 
 
   useEffect(() => {

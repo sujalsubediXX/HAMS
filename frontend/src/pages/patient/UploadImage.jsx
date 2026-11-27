@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import axios from "axios"
+import API_BASE_URL from "../../config/api";
 const UploadImage = () => {
     const [file,setfile]=useState("");
    const formdata=new FormData();
@@ -9,7 +10,7 @@ const UploadImage = () => {
         e.preventDefault();
         if(file?.name){
             try {
-                const res=await axios.post("https://hams-7zpe.onrender.com/api/doctor/image",formdata,{
+                const res=await axios.post(`${API_BASE_URL}/api/doctor/image`,formdata,{
                     headers:{
                         "Content-Type":"multipart/form-data"
                     }
@@ -19,7 +20,7 @@ const UploadImage = () => {
                 }
             } catch (error) {
                 console.log("Error")
-                console.log(res.data.message);
+                console.log(error.message);
                 
             }
         }else{

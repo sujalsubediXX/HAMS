@@ -5,6 +5,7 @@ import { useAuth } from "../../Utils/AuthProvider.jsx";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import ConfirmAlert from "../../Components/ConfirmAlert.jsx";
 import { useNavigate } from "react-router-dom";
+import API_BASE_URL from "../../config/api";
 export default function PatientSetting() {
   const { user ,logout} = useAuth();
 
@@ -30,7 +31,7 @@ export default function PatientSetting() {
       toast.error("Password length should be more than 6 characters.");
     } else {
       try {
-        const res = await axios.put(`https://hams-7zpe.onrender.com/api/user/updatepassword`, {
+        const res = await axios.put(`${API_BASE_URL}/api/user/updatepassword`, {
           email: user.email,
           pass,
           cpass,
@@ -58,7 +59,7 @@ export default function PatientSetting() {
   
     const handledelete = async () => {
       try {
-        const res = await axios.delete("https://hams-7zpe.onrender.com/api/user/deleteaccount", {
+        const res = await axios.delete(`${API_BASE_URL}/api/user/deleteaccount`, {
           data: { email: user.email }, 
         });
     
