@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FaSearch, FaFilter } from "react-icons/fa";
 import Fuse from "fuse.js";
-
+import API_BASE_URL from "../../config/api";
 const TotalAppointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [searchuser, setSearchdusers] = useState("");
@@ -19,7 +19,7 @@ const TotalAppointments = () => {
   useEffect(() => {
     (async () => {
       try {
-        const res = await axios.get("https://hams-7zpe.onrender.com/api/appointment/getappointmentdata");
+        const res = await axios.get(`${API_BASE_URL}/api/appointment/getappointmentdata`);
         if (res.status === 200) {
           setAppointments(res.data.data);
          

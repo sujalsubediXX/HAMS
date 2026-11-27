@@ -4,13 +4,14 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import Fuse from "fuse.js";
+import API_BASE_URL from "../../config/api";
 const ManageDoctors = () => {
   const [doctors, setDoctors] = useState([]);
   const [searchdoctor, setSearchdoctors] = useState("");
   const [currentPage, setCurrentPage] = useState(1); // MUI starts from 1
 const getUser = async () => {
       try {
-        const res = await axios.get("https://hams-7zpe.onrender.com/api/doctor/doctordata");
+        const res = await axios.get(`${API_BASE_URL}/api/doctor/doctordata`);
         setDoctors(res.data.data);
       } catch (error) {
         toast.error("Backend server not started or crashed.");
@@ -52,7 +53,7 @@ const getUser = async () => {
 const handledelete = async (id) => {
   
   try {
-    const res = await axios.delete("https://hams-7zpe.onrender.com/api/doctor/deleteaccount", {
+    const res = await axios.delete(`${API_BASE_URL}/api/doctor/deleteaccount`, {
       data: { id: id }, 
     });
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FaSearch, FaFilter } from "react-icons/fa";
 import Fuse from "fuse.js";
 import axios from "axios";
-
+import API_BASE_URL from "../../config/api";
 const ManagePatients = () => {
   const [patients, setPatients] = useState([]);
   const [searchUser, setSearchUser] = useState("");
@@ -14,7 +14,7 @@ const ManagePatients = () => {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const res = await axios.get("https://hams-7zpe.onrender.com/api/user/userdata");
+        const res = await axios.get(`${API_BASE_URL}/api/user/userdata`);
         setPatients(res.data.data);
       } catch (error) {
         console.error(`Fetching patient error: ${error.message}`);
