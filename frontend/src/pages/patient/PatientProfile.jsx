@@ -4,8 +4,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import ConfirmAlert from "../../Components/ConfirmAlert.jsx";
 import { useAuth } from "../../Utils/AuthProvider";
-
-const BASE_URL = "https://hams-7zpe.onrender.com";
+import API_BASE_URL from "../../config/api";
 
 const PatientProfile = () => {
   const [uservalue, setuservalue] = useState(null);
@@ -74,7 +73,7 @@ const PatientProfile = () => {
     const fetchAppointments = async () => {
       try {
         const res = await axios.get(
-          `${BASE_URL}/api/appointment/getappointment?id=${uservalue._id}`
+          `${API_BASE_URL}/api/appointment/getappointment?id=${uservalue._id}`
         );
         setAppointments(res.data?.appointment || []);
       } catch (error) {
@@ -87,7 +86,7 @@ const PatientProfile = () => {
     const fetchHistory = async () => {
       try {
         const res = await axios.get(
-          `${BASE_URL}/api/medicalhistory/getMedicalHistory?id=${uservalue._id}`
+          `${API_BASE_URL}/api/medicalhistory/getMedicalHistory?id=${uservalue._id}`
         );
         if (res.status === 200) setmedicalhistory(res.data?.data || []);
       } catch (error) {
@@ -107,7 +106,7 @@ const PatientProfile = () => {
     if (!docID || !rescheduledata.date) return;
     try {
       const res = await axios.get(
-        `${BASE_URL}/api/appointment/getDoctorTimeSlots?doctorId=${docID}&date=${rescheduledata.date}`
+        `${API_BASE_URL}/api/appointment/getDoctorTimeSlots?doctorId=${docID}&date=${rescheduledata.date}`
       );
       if (res.status === 200 && res.data.data && res.data.data.length > 0) {
         setTimeslot(res.data.data);
@@ -138,7 +137,7 @@ const PatientProfile = () => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.put(`${BASE_URL}/api/user/updateprofile`, {
+      const res = await axios.put(`${API_BASE_URL}/api/user/updateprofile`, {
         updatedata: formData,
       });
       if (res.status === 200) {
@@ -159,7 +158,7 @@ const PatientProfile = () => {
         const imagedata = new FormData();
         imagedata.append("image", profileimage);
         imagedata.append("email", formData.email);
-        const res = await axios.post(`${BASE_URL}/api/user/insertimage`, imagedata, {
+        const res = await axios.post(`${API_BASE_URL}/api/user/insertimage`, imagedata, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         if (res.status === 201) {
@@ -177,7 +176,7 @@ const PatientProfile = () => {
 
   const handleCancelAppointment = async (id) => {
     try {
-      const res = await axios.put(`${BASE_URL}/api/appointment/cancelappointment/${id}`);
+      const res = await axios.put(`${API_BASE_URL}/api/appointment/cancelappointment/${id}`);
       if (res.status === 200) toast.success("Appointment cancelled.");
       else toast.error("Appointment cancellation failed.");
       setConfirm(false);
@@ -212,7 +211,7 @@ const PatientProfile = () => {
         patientID: rescheduledata.patientID,
       };
 
-      const res = await axios.put(`${BASE_URL}/api/appointment/reschedule`, payload);
+      const res = await axios.put(`${API_BASE_URL}/api/appointment/reschedule`, payload);
       if (res.status === 200) {
         toast.success("Appointment rescheduled successfully.");
         setShowRescheduleModal(false);
@@ -242,7 +241,7 @@ const PatientProfile = () => {
       const { latitude, longitude } = pos.coords;
 
       try {
-        const res = await axios.put(`${BASE_URL}/api/user/changelocation`, {
+        const res = await axios.put(`${API_BASE_URL}/api/user/changelocation`, {
           id: uservalue._id,
           location: { lat: latitude, lng: longitude },
         });
@@ -257,7 +256,7 @@ const PatientProfile = () => {
 
   const HandleavailableDays = async (id) => {
     try {
-      const res = await axios.get(`${BASE_URL}/api/doctor/doctordata?id=${id}`);
+      const res = await axios.get(`${API_BASE_URL}/api/doctor/doctordata?id=${id}`);
       if (res.status === 200) setavailabledays(res.data.data[0].availableDays);
     } catch (error) {
       console.log("Error fetching available days:", error);

@@ -3,7 +3,7 @@ import axios from "axios";
 import "leaflet/dist/leaflet.css";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
-
+import API_BASE_URL from "../../config/api";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
@@ -28,7 +28,7 @@ export const PatientLocation = () => {
     const fetchlocation = async () => {
       try {
         const getlocation = await axios.get(
-          `https://hams-7zpe.onrender.com/api/user/getuserlocation?email=${user.email}`,
+          `${API_BASE_URL}/api/user/getuserlocation?email=${user.email}`,
           { withCredentials: true }
         );
         if (getlocation.status === 200) {
@@ -53,7 +53,7 @@ export const PatientLocation = () => {
 
       try {
         const res = await axios.get(
-          "https://hams-7zpe.onrender.com/api/hospital/location",
+          `${API_BASE_URL}/api/hospital/location`,
           { withCredentials: true }
         );
         if (res.status === 201) {

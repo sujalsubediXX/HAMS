@@ -2,7 +2,7 @@ import { FaSearch } from "react-icons/fa";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../Utils/AuthProvider";
-
+import API_BASE_URL from "../../config/api";
 const Patients = () => {
   const { user } = useAuth();
   const [patient, setPatientData] = useState([]);
@@ -16,7 +16,7 @@ const Patients = () => {
       if (user?.email) {
         try {
           const res = await axios.get(
-            "https://hams-7zpe.onrender.com/api/appointment/patients-by-doctor-email",
+            `${API_BASE_URL}/api/appointment/patients-by-doctor-email`,
             {
               params: { email: user.email },
             }
