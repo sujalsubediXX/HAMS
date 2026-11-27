@@ -5,7 +5,7 @@ import { FaEyeSlash, FaEye } from "react-icons/fa";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useAuth } from "../Utils/AuthProvider";
-
+import API_BASE_URL from "../config/api";
 const AdminLogin = () => {
   const navigate = useNavigate();
   const { user, login } = useAuth();
@@ -27,7 +27,7 @@ const AdminLogin = () => {
       setLoading(true);
       let res = "";
       let location = "";
-      res = await axios.post("https://hams-7zpe.onrender.com/api/admin/login", {
+      res = await axios.post(`${API_BASE_URL}/api/admin/login`, {
         email,
         password,
       });

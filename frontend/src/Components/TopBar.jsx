@@ -5,7 +5,7 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 import doctorimg from "/doctoriamge.png";
 import { toast } from "react-hot-toast"; 
-
+import API_BASE_URL from "../config/api";
 const TopBar = () => {
   const { userData} = useAuth();
 
@@ -23,7 +23,7 @@ const TopBar = () => {
       imagedata.append("email", userData.email);
 
       try {
-        const res = await axios.post("https://hams-7zpe.onrender.com/api/doctor/insertdoctorimage", imagedata, {
+        const res = await axios.post(`${API_BASE_URL}/api/doctor/insertdoctorimage`, imagedata, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
